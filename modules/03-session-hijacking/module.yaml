@@ -1,0 +1,18 @@
+id: "03-session-hijacking"
+title: "세션/쿠키 탈취 실습 · XSS로 로그인 가로채기"
+category: "웹 보안"
+session: 6
+difficulty: "초중급"
+duration: "60분"
+summary: "일부러 취약하게 만든 방명록에서 저장형 XSS로 세션 쿠키가 어떻게 탈취되는지, 탈취된 쿠키로 어떻게 남의 계정에 들어가는지 직접 본다. HttpOnly·출력 인코딩 방어까지."
+objectives:
+  - "쿠키와 세션이 로그인 상태를 어떻게 유지하는지 이해"
+  - "저장형 XSS(Stored XSS)의 동작 원리 체험"
+  - "탈취된 세션 쿠키로 계정 가로채기(세션 하이재킹) 시연"
+  - "HttpOnly, 출력 인코딩, SameSite 등 방어 기법 학습"
+multi_user: true
+runtime:
+  type: "docker-compose"
+  compose_file: "docker-compose.yml"
+  url: "http://localhost:5002"
+  lan_port: 5002

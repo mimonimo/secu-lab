@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>사이트 복제 인식 실습</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.6; }
+    header { background: #1e293b; padding: 1.2rem 1.5rem; border-bottom: 1px solid #334155; }
+    header h1 { font-size: 1.25rem; }
+    header p { color: #94a3b8; font-size: .85rem; }
+    main { max-width: 860px; margin: 1.5rem auto; padding: 0 1rem; }
+    section { background: #1e293b; border: 1px solid #334155; border-radius: 14px; padding: 1.5rem; margin-bottom: 1.5rem; }
+    h2 { font-size: 1.05rem; color: #38bdf8; margin-bottom: .8rem; }
+    p { margin-bottom: .7rem; }
+    .muted { color: #94a3b8; font-size: .88rem; }
+
+    /* 가짜 브라우저 프레임 */
+    .browser { border: 1px solid #475569; border-radius: 10px; overflow: hidden; margin: 1rem 0; background: #fff; }
+    .chrome { background: #e2e8f0; padding: .5rem .8rem; display: flex; align-items: center; gap: .5rem; }
+    .dots { display: flex; gap: .3rem; }
+    .dots span { width: 11px; height: 11px; border-radius: 50%; }
+    .addr { flex: 1; background: #fff; border-radius: 6px; padding: .35rem .7rem; font-family: ui-monospace, monospace; font-size: .82rem; color: #1e293b; display: flex; align-items: center; gap: .4rem; }
+    .lock-ok { color: #16a34a; } .lock-bad { color: #dc2626; }
+    .page { padding: 1.5rem; color: #1e293b; text-align: center; }
+    .bank-logo { font-size: 1.5rem; font-weight: 800; color: #1d4ed8; }
+    .bank-logo span { color: #16a34a; }
+    .page input { display: block; width: 80%; margin: .5rem auto; padding: .5rem; border: 1px solid #cbd5e1; border-radius: 6px; }
+    .page .btn { background: #1d4ed8; color: #fff; border: none; padding: .5rem 1.2rem; border-radius: 6px; margin-top: .5rem; }
+
+    button.action { background: #38bdf8; color: #0f172a; border: none; border-radius: 8px; padding: .6rem 1.1rem; font-weight: 700; cursor: pointer; }
+    button.action:hover { background: #0ea5e9; }
+    .reveal { background: #422006; border: 1px solid #92400e; color: #fde68a; border-radius: 8px; padding: 1rem; margin-top: 1rem; font-size: .88rem; display: none; }
+    .reveal.show { display: block; }
+
+    table { width: 100%; border-collapse: collapse; margin-top: .5rem; }
+    th, td { border: 1px solid #334155; padding: .55rem .7rem; text-align: left; font-size: .88rem; }
+    th { background: #334155; }
+
+    /* 퀴즈 */
+    .quiz-q { font-weight: 600; margin-bottom: .8rem; }
+    .opt { display: block; width: 100%; text-align: left; background: #0f172a; border: 1px solid #475569; color: #e2e8f0; border-radius: 8px; padding: .7rem .9rem; margin-bottom: .5rem; cursor: pointer; font-family: ui-monospace, monospace; font-size: .85rem; }
+    .opt:hover { border-color: #38bdf8; }
+    .opt.correct { background: #052e16; border-color: #16a34a; }
+    .opt.wrong { background: #450a0a; border-color: #dc2626; }
+    .feedback { margin-top: .6rem; font-size: .88rem; padding: .7rem; border-radius: 8px; display: none; }
+    .feedback.show { display: block; }
+    .feedback.ok { background: #052e16; color: #86efac; }
+    .feedback.no { background: #450a0a; color: #fca5a5; }
+    .quiz-nav { margin-top: 1rem; display: flex; justify-content: space-between; align-items: center; }
+    .score { color: #94a3b8; font-size: .85rem; }
+    ul { padding-left: 1.3rem; } li { margin-bottom: .4rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🔎 사이트 복제 인식 실습</h1>
+    <p>겉모습은 누구나 베낀다 — 그래서 '겉모습'을 믿으면 안 된다. (가상 브랜드: 한빛은행)</p>
+  </header>
+
+  <main>
+    <!-- 1. 복제 원리 -->
+    <section>
+      <h2>1. 복제는 왜 이렇게 쉬울까?</h2>
+      <p>웹페이지의 화면은 <b>HTML/CSS</b>로 만들어집니다. 브라우저에서 누구나
+        <b>소스 보기·페이지 저장</b>으로 그대로 가져와 똑같은 화면을 다른 주소에 띄울 수 있어요.</p>
+
+      <div class="browser">
+        <div class="chrome">
+          <div class="dots"><span style="background:#ef4444"></span><span style="background:#eab308"></span><span style="background:#22c55e"></span></div>
+          <div class="addr" id="addr">
+            <span id="lock" class="lock-ok">🔒</span>
+            <span id="url">https://www.hanbit-bank.co.kr</span>
+          </div>
+        </div>
+        <div class="page">
+          <div class="bank-logo">한빛<span>은행</span></div>
+          <p style="color:#475569;font-size:.85rem;">안전한 인터넷뱅킹</p>
+          <input placeholder="아이디" /><input placeholder="비밀번호" type="password" />
+          <button class="btn">로그인</button>
+        </div>
+      </div>
+
+      <button class="action" onclick="cloneIt()">🖱️ 이 사이트 '겉모습' 복제해보기</button>
+      <div class="reveal" id="cloneReveal">
+        방금 <b>완전히 똑같은 화면</b>이 떴지만, 주소창을 보세요 →
+        <code id="urlNote"></code><br />
+        화면(HTML/CSS)은 1초면 복제됩니다. <b>하지만 주소(도메인)와 HTTPS 인증서는 함부로 못 베낍니다.</b>
+        그래서 진짜/가짜는 <b>겉모습이 아니라 주소창</b>에서 갈립니다.
+      </div>
+    </section>
+
+    <!-- 2. 진짜는 못 베끼는 것 -->
+    <section>
+      <h2>2. 겉모습 vs 진짜로 확인할 것</h2>
+      <table>
+        <tr><th>쉽게 복제됨 (믿으면 안 됨)</th><th>위조 어려움 (확인 기준)</th></tr>
+        <tr><td>로고, 디자인, 글자, 레이아웃</td><td><b>도메인 이름</b> (정확한 철자)</td></tr>
+        <tr><td>버튼, 색깔, 이미지</td><td><b>HTTPS 인증서</b> (자물쇠 → 발급 대상)</td></tr>
+        <tr><td>"보안" 같은 안심 문구</td><td><b>유입 경로</b> (직접 입력했나, 링크 타고 왔나)</td></tr>
+      </table>
+    </section>
+
+    <!-- 3. 퀴즈 -->
+    <section>
+      <h2>3. 스팟 더 페이크 · 어느 쪽이 가짜일까?</h2>
+      <div id="quiz">
+        <div class="quiz-q" id="qText"></div>
+        <div id="opts"></div>
+        <div class="feedback" id="fb"></div>
+        <div class="quiz-nav">
+          <span class="score" id="score"></span>
+          <button class="action" id="nextBtn" onclick="nextQ()" style="display:none">다음 →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. 체크리스트 -->
+    <section>
+      <h2>4. 가짜를 거르는 습관</h2>
+      <ul>
+        <li>로그인 전에 <b>주소창의 도메인 철자</b>를 또박또박 읽는다. (<code>hanbit-bank</code> vs <code>hanbit-bamk</code>)</li>
+        <li>로그인 페이지가 <b>http</b>이거나 자물쇠가 없으면 멈춘다.</li>
+        <li>문자/메일 <b>링크로 들어온 로그인</b>은 의심하고, 앱·즐겨찾기·직접 입력으로 들어간다.</li>
+        <li>"지금 안 하면 계정 정지" 같은 <b>급한 압박</b>은 전형적 미끼.</li>
+        <li>똑같이 생겼다고 안심하지 않는다 — <b>겉모습은 증거가 아니다.</b></li>
+      </ul>
+    </section>
+  </main>
+
+  <script>
+    // --- 복제 시연 ---
+    let cloned = false;
+    function cloneIt() {
+      const url = document.getElementById('url');
+      const lock = document.getElementById('lock');
+      const reveal = document.getElementById('cloneReveal');
+      const note = document.getElementById('urlNote');
+      if (!cloned) {
+        url.textContent = 'http://hanbit-bank-event.com/login';
+        lock.textContent = '⚠️';
+        lock.className = 'lock-bad';
+        note.textContent = 'http://hanbit-bank-event.com  (진짜와 다른 가짜 도메인!)';
+        reveal.classList.add('show');
+        cloned = true;
+      } else {
+        url.textContent = 'https://www.hanbit-bank.co.kr';
+        lock.textContent = '🔒';
+        lock.className = 'lock-ok';
+        reveal.classList.remove('show');
+        cloned = false;
+      }
+    }
+
+    // --- 퀴즈 ---
+    const QUESTIONS = [
+      {
+        q: "한빛은행 진짜 주소는 hanbit-bank.co.kr 입니다. 다음 중 가짜(피싱) 사이트는?",
+        opts: ["https://www.hanbit-bank.co.kr", "https://www.hanbit-bamk.co.kr"],
+        answer: 1,
+        why: "'bank'가 'bamk'로 바뀌었습니다. 비슷한 철자로 속이는 전형적 수법(타이포스쿼팅)."
+      },
+      {
+        q: "로그인 페이지로 적절한 것은?",
+        opts: ["http://hanbit-bank.co.kr/login (자물쇠 없음)", "https://hanbit-bank.co.kr/login (자물쇠 있음)"],
+        answer: 0,
+        why: "로그인처럼 민감한 페이지가 http(자물쇠 없음)이면 위험 신호입니다. https가 정상."
+      },
+      {
+        q: "다음 중 가짜일 가능성이 높은 주소는?",
+        opts: ["https://hanbit-bank.co.kr", "https://hanbit-bank.security-login.com"],
+        answer: 1,
+        why: "진짜 도메인은 맨 끝(최상위) 부분입니다. 이 주소의 실제 도메인은 security-login.com 이고 hanbit-bank는 미끼로 앞에 붙였을 뿐입니다."
+      },
+      {
+        q: "문자로 '계정 확인 필요'라며 링크가 왔습니다. 가장 안전한 행동은?",
+        opts: ["링크를 눌러 바로 로그인한다", "링크 무시하고 은행 앱/공식 사이트에 직접 들어가 확인한다"],
+        answer: 1,
+        why: "링크는 가짜 사이트로 유도할 수 있습니다. 항상 직접 공식 경로로 접속해 확인하세요."
+      }
+    ];
+
+    let qi = 0, score = 0, answered = false;
+    function renderQ() {
+      answered = false;
+      const Q = QUESTIONS[qi];
+      document.getElementById('qText').textContent = `Q${qi + 1}. ${Q.q}`;
+      const opts = document.getElementById('opts');
+      opts.innerHTML = '';
+      Q.opts.forEach((text, i) => {
+        const b = document.createElement('button');
+        b.className = 'opt';
+        b.textContent = text;
+        b.onclick = () => choose(i, b);
+        opts.appendChild(b);
+      });
+      document.getElementById('fb').className = 'feedback';
+      document.getElementById('nextBtn').style.display = 'none';
+      updateScore();
+    }
+    function choose(i, btn) {
+      if (answered) return;
+      answered = true;
+      const Q = QUESTIONS[qi];
+      const fb = document.getElementById('fb');
+      const all = document.querySelectorAll('.opt');
+      all[Q.answer].classList.add('correct');
+      if (i === Q.answer) {
+        score++;
+        fb.className = 'feedback ok show';
+        fb.textContent = '⭕ 정답! ' + Q.why;
+      } else {
+        btn.classList.add('wrong');
+        fb.className = 'feedback no show';
+        fb.textContent = '❌ 아쉬워요. ' + Q.why;
+      }
+      document.getElementById('nextBtn').style.display = qi < QUESTIONS.length - 1 ? 'inline-block' : 'none';
+      if (qi === QUESTIONS.length - 1) {
+        setTimeout(() => {
+          fb.textContent += `  ▶ 최종 점수: ${score}/${QUESTIONS.length}`;
+        }, 100);
+      }
+      updateScore();
+    }
+    function nextQ() { if (qi < QUESTIONS.length - 1) { qi++; renderQ(); } }
+    function updateScore() { document.getElementById('score').textContent = `점수 ${score} / ${QUESTIONS.length}`; }
+    renderQ();
+  </script>
+</body>
+</html>

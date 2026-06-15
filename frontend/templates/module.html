@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ m.title }} · secu-lab</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen">
+  <header class="border-b border-slate-800 bg-slate-900/60 backdrop-blur">
+    <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="/" class="text-sm text-sky-400 hover:text-sky-300">← 대시보드</a>
+      <span class="text-xs text-slate-500">{{ m.category }}{% if m.session %} · {{ m.session }}회차{% endif %}</span>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-6 py-8" data-module-id="{{ m.id }}">
+    <div class="flex items-start justify-between gap-4 mb-2">
+      <h1 class="text-2xl font-bold">{{ m.title }}</h1>
+      <span class="status-badge text-xs px-3 py-1 rounded-full bg-slate-800 text-slate-400 whitespace-nowrap">…</span>
+    </div>
+    <p class="text-slate-400 mb-4">{{ m.summary }}</p>
+
+    <div class="flex flex-wrap gap-3 text-xs text-slate-400 mb-6">
+      <span class="px-2 py-1 rounded bg-slate-800">📊 {{ m.difficulty }}</span>
+      {% if m.duration %}<span class="px-2 py-1 rounded bg-slate-800">⏱ {{ m.duration }}</span>{% endif %}
+      {% if m.multi_user %}<span class="px-2 py-1 rounded bg-slate-800">👥 멀티 핸즈온 가능</span>{% endif %}
+    </div>
+
+    {% if m.objectives %}
+    <div class="rounded-xl border border-slate-800 bg-slate-900/50 p-5 mb-6">
+      <h2 class="text-sm font-semibold text-sky-300 mb-2">학습 목표</h2>
+      <ul class="list-disc list-inside space-y-1 text-sm text-slate-300">
+        {% for o in m.objectives %}<li>{{ o }}</li>{% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
+    {% if m.runtime.type == 'docker-compose' %}
+    <div class="rounded-xl border border-slate-800 bg-slate-900/50 p-5 mb-6">
+      <h2 class="text-sm font-semibold text-sky-300 mb-3">실습 환경 제어</h2>
+      {% if not docker_ok %}
+      <p class="text-amber-300 text-sm mb-3">⚠️ Docker Desktop이 실행 중이지 않습니다.</p>
+      {% endif %}
+      <div class="flex gap-3 mb-4">
+        <button class="btn-start text-sm font-medium rounded-lg bg-emerald-600 hover:bg-emerald-500 px-4 py-2 transition disabled:opacity-40">▶ 시작</button>
+        <button class="btn-stop text-sm font-medium rounded-lg bg-slate-700 hover:bg-rose-600 px-4 py-2 transition disabled:opacity-40">■ 종료</button>
+        <span class="action-msg text-sm text-slate-400 self-center"></span>
+      </div>
+      {% if m.runtime.url %}
+      <div class="text-sm space-y-1">
+        <div>강사 PC 접속: <a class="font-mono text-sky-400 hover:underline" href="{{ m.runtime.url }}" target="_blank">{{ m.runtime.url }}</a></div>
+        {% if m.multi_user and lan_url %}
+        <div>학생 접속(같은 와이파이): <span class="font-mono text-emerald-400">{{ lan_url }}</span></div>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+    {% elif m.runtime.type == 'manual' and m.runtime.notes %}
+    <div class="rounded-xl border border-amber-700/40 bg-amber-500/5 p-5 mb-6 text-sm text-amber-100/90">
+      <h2 class="font-semibold mb-2">수동 실행 안내</h2>
+      <p class="whitespace-pre-line">{{ m.runtime.notes }}</p>
+    </div>
+    {% endif %}
+
+    {% if guide_html %}
+    <article class="prose-guide rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+      {{ guide_html | safe }}
+    </article>
+    {% else %}
+    <p class="text-slate-500 text-sm">이 모듈에는 가이드 문서(guide.md)가 없습니다.</p>
+    {% endif %}
+  </main>
+
+  <footer class="border-t border-slate-800 mt-12">
+    <div class="max-w-4xl mx-auto px-6 py-4 text-xs text-slate-500">secu-lab · 교육 목적 전용</div>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}TalkSpot · 홈{% endblock %}
+{% block body %}
+<div class="card">
+  <h1>💬 TalkSpot 커뮤니티</h1>
+  <p class="hint">교육용 가상 커뮤니티입니다. 로그인하면 세션 쿠키가 발급됩니다.</p>
+  {% if user %}
+    <p style="margin-top:1rem;">현재 <b>{{ user }}</b> 님으로 로그인됨.
+      <a href="/logout">로그아웃</a></p>
+  {% else %}
+    <form action="/login" method="post">
+      <label for="username">닉네임으로 로그인 (비밀번호 없음 · 실습용)</label>
+      <input id="username" name="username" placeholder="예: alice, bob, teacher" />
+      <button type="submit">로그인</button>
+    </form>
+  {% endif %}
+</div>
+
+<div class="card">
+  <h2>강사 제어판</h2>
+  <p class="hint">같은 공격 페이로드가 두 모드에서 어떻게 다르게 동작하는지 비교하세요.</p>
+  <form action="/mode" method="post" style="display:inline">
+    <input type="hidden" name="safe" value="{{ 'off' if safe_mode else 'on' }}" />
+    <button type="submit" class="ghost">
+      {{ '취약 모드로 전환 ⚠️' if safe_mode else '안전 모드로 전환 🛡️' }}
+    </button>
+  </form>
+  <form action="/reset" method="post" style="display:inline">
+    <button type="submit" class="danger">방명록·탈취기록 초기화</button>
+  </form>
+  <p class="hint" style="margin-top:1rem;">
+    <b>취약 모드:</b> 쿠키에 HttpOnly 없음 + 방명록 글을 HTML 그대로 출력 → XSS 발동<br />
+    <b>안전 모드:</b> HttpOnly+SameSite 쿠키 + 출력 인코딩 → 같은 공격이 무력화됨
+  </p>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+id: "02-phishing-awareness"
+title: "피싱 인식 실습 · 가짜 로그인 페이지의 정체"
+category: "사회공학 / 인식 교육"
+session: 5
+difficulty: "입문"
+duration: "40분"
+summary: "가상 브랜드 'SkyBird'의 가짜 로그인 페이지에 직접 정보를 입력해 보고, 입력 즉시 '이것이 피싱'임을 폭로하며 식별법을 배운다. 외부 전송·실제 계정 탈취 없음."
+objectives:
+  - "피싱 페이지가 어떻게 사람을 속이는지 체험으로 이해"
+  - "주소창(도메인), 자물쇠(HTTPS), 디자인 위화감 등 식별 단서 학습"
+  - "내가 입력한 정보가 공격자에게 어떻게 보이는지 직접 확인"
+  - "의심스러운 로그인 요청에 대응하는 습관 형성"
+multi_user: true
+runtime:
+  type: "docker-compose"
+  compose_file: "docker-compose.yml"
+  url: "http://localhost:5001"
+  lan_port: 5001

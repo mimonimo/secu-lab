@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}TalkSpot · 마이페이지{% endblock %}
+{% block body %}
+<div class="card">
+  <h1>🙍 마이페이지</h1>
+  {% if user %}
+    <p>현재 <b>{{ user }}</b> 님으로 로그인되어 있습니다.</p>
+    <div class="card" style="background:#fef2f2;border-color:#fecaca;margin-top:1rem;">
+      <h2 style="color:#dc2626;">🔒 비공개 정보</h2>
+      <p>{{ secret }}</p>
+      <p class="hint">세션 쿠키만 있으면 비밀번호 없이도 이 사람의 모든 정보에 접근할 수 있습니다.
+        이것이 세션 하이재킹의 위험입니다.</p>
+    </div>
+  {% else %}
+    <p class="hint">로그인되어 있지 않습니다(유효한 세션 쿠키 없음). 홈에서 로그인하세요.</p>
+  {% endif %}
+</div>
+{% endblock %}

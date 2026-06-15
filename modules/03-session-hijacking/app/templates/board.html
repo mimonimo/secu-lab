@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}TalkSpot · 방명록{% endblock %}
+{% block body %}
+<div class="card">
+  <h1>📝 방명록</h1>
+  {% if safe_mode %}
+    <span class="badge">🛡️ 안전 모드: 입력이 이스케이프되어 스크립트가 실행되지 않습니다</span>
+  {% else %}
+    <span class="badge">⚠️ 취약 모드: 입력이 HTML로 그대로 렌더링됩니다</span>
+  {% endif %}
+  <form action="/comment" method="post" style="margin-top:1rem;">
+    <label for="author">작성자</label>
+    <input id="author" name="author" value="{{ user or '' }}" />
+    <label for="body">내용</label>
+    <textarea id="body" name="body" rows="3" placeholder="글을 남겨보세요..."></textarea>
+    <button type="submit">등록</button>
+  </form>
+</div>
+
+<div class="card">
+  <h2>글 목록</h2>
+  {% if comments %}
+    {% for c in comments %}
+    <div class="comment">
+      <div class="meta">{{ c.author }} · {{ c.time }}</div>
+      <div>{{ c.body | safe }}</div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <p class="hint">아직 글이 없습니다.</p>
+  {% endif %}
+</div>
+{% endblock %}

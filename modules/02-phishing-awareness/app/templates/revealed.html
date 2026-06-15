@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>잠깐! 이건 피싱이었어요</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #e2e8f0;
+      min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
+    .card { background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 2rem;
+      width: 100%; max-width: 560px; }
+    .alert { font-size: 1.6rem; font-weight: 800; color: #f87171; margin-bottom: .5rem; }
+    .lead { color: #cbd5e1; margin-bottom: 1.5rem; line-height: 1.6; }
+    .captured { background: #0f172a; border: 1px solid #475569; border-radius: 10px; padding: 1rem 1.2rem; margin-bottom: 1.5rem; }
+    .captured h3 { font-size: .8rem; color: #f87171; text-transform: uppercase; margin-bottom: .6rem; letter-spacing: .05em; }
+    .row { display: flex; justify-content: space-between; padding: .35rem 0; border-bottom: 1px dashed #334155; font-size: .9rem; }
+    .row:last-child { border: none; }
+    .row .k { color: #94a3b8; }
+    .row .v { font-family: ui-monospace, monospace; color: #fde047; }
+    h2 { font-size: 1rem; color: #38bdf8; margin: 1.5rem 0 .6rem; }
+    ul { padding-left: 1.2rem; line-height: 1.8; color: #cbd5e1; }
+    ul b { color: #f1f5f9; }
+    .back { display: inline-block; margin-top: 1.5rem; background: #38bdf8; color: #0f172a; font-weight: 700;
+      padding: .7rem 1.2rem; border-radius: 8px; text-decoration: none; }
+    .note { font-size: .78rem; color: #64748b; margin-top: 1.25rem; line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="alert">🎣 잠깐! 방금 당신은 피싱에 당했습니다</div>
+    <p class="lead">
+      이 'SkyBird'는 존재하지 않는 가짜 사이트예요. 방금 입력한 정보는 진짜 로그인에 쓰인 게 아니라,
+      <b>가짜 페이지를 만든 사람(공격자)에게 그대로 넘어갑니다.</b> 실습이라 안전하지만, 진짜였다면 계정을 빼앗겼을 거예요.
+    </p>
+
+    <div class="captured">
+      <h3>공격자가 받아간 정보</h3>
+      <div class="row"><span class="k">아이디 / 이메일</span><span class="v">{{ username }}</span></div>
+      <div class="row"><span class="k">비밀번호</span><span class="v">{{ password_masked }} ({{ password_len }}자)</span></div>
+    </div>
+    <p style="font-size:.8rem;color:#94a3b8;margin-bottom:1rem;">
+      ※ 실습에서는 비밀번호를 가렸지만, 실제 공격자는 <b>전체 비밀번호를 그대로</b> 봅니다.
+    </p>
+
+    <h2>이렇게 알아챘어야 해요 🔍</h2>
+    <ul>
+      <li><b>주소창(도메인)</b>을 확인하세요. 진짜 사이트 주소가 맞나요? 비슷하지만 다른 철자는 아닌가요?</li>
+      <li><b>http</b>인지 <b>https</b>(자물쇠)인지 보세요. 로그인 페이지가 http면 위험 신호.</li>
+      <li><b>"지금 로그인하면 선물"</b> 같은 급한 미끼는 전형적인 피싱 수법이에요.</li>
+      <li>메시지·메일의 링크로 들어온 로그인 창은 <b>특히 의심</b>하세요. 직접 주소를 입력해 들어가세요.</li>
+      <li>같은 비밀번호를 여러 곳에 쓰면, 한 곳이 털릴 때 전부 위험해져요.</li>
+    </ul>
+
+    <a class="back" href="/">← 다시 해보기</a>
+
+    <p class="note">
+      교육용 시뮬레이션입니다. 입력값은 외부로 전송되지 않으며 어디에도 영구 저장되지 않습니다.
+      실습 환경을 종료하면 모든 기록이 사라집니다.
+    </p>
+  </div>
+</body>
+</html>

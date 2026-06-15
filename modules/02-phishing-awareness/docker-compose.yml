@@ -1,0 +1,9 @@
+# 피싱 인식 실습 - 자기완결형 Flask 앱 (가상 브랜드, 로컬 전용)
+# 입력값은 외부로 절대 전송되지 않으며, 교육용 폭로 화면을 위해 메모리에만 잠시 보관됩니다.
+services:
+  phishing-awareness:
+    build: ./app
+    container_name: seculab-phishing-awareness
+    ports:
+      - "5001:5001"
+    restart: "no"

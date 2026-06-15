@@ -1,0 +1,9 @@
+# 세션/쿠키 탈취 실습 - 자기완결형 Flask 앱 (의도적 취약, 로컬 전용)
+# 교육용으로 일부러 XSS에 취약하게 만든 앱입니다. 인터넷에 노출 금지.
+services:
+  session-hijacking:
+    build: ./app
+    container_name: seculab-session-hijacking
+    ports:
+      - "5002:5002"
+    restart: "no"

@@ -1,0 +1,11 @@
+# OWASP Juice Shop - 교육 전용 의도적 취약 웹앱
+# 공식 이미지: https://hub.docker.com/r/bkimminich/juice-shop
+services:
+  juice-shop:
+    image: bkimminich/juice-shop:v17.1.1
+    container_name: seculab-juiceshop
+    # 0.0.0.0 바인딩으로 같은 LAN의 학생 노트북에서도 접속 가능.
+    # 절대 공인 IP/인터넷에 노출하지 말 것 (교육용 취약 앱).
+    ports:
+      - "3000:3000"
+    restart: "no"

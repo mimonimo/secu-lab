@@ -1,0 +1,18 @@
+id: "04-site-clone-awareness"
+title: "사이트 복제 인식 실습 · 가짜를 가려내는 눈"
+category: "사회공학 / 인식 교육"
+session: 7
+difficulty: "입문"
+duration: "40분"
+summary: "웹사이트의 '겉모습'은 누구나 그대로 복제할 수 있다는 원리를 시연하고, 진짜와 복제본을 구별하는 식별법을 퀴즈로 익힌다. 가상 브랜드 '한빛은행' 사용."
+objectives:
+  - "사이트 복제(클로닝)가 왜 기술적으로 쉬운지 이해"
+  - "겉모습이 똑같아도 도메인/인증서는 위조하기 어렵다는 점 학습"
+  - "주소창, HTTPS 인증서, 유입 경로로 진짜/가짜 구별"
+  - "복제 사이트에 속지 않는 습관 형성"
+multi_user: true
+runtime:
+  type: "docker-compose"
+  compose_file: "docker-compose.yml"
+  url: "http://localhost:5003"
+  lan_port: 5003

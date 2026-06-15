@@ -1,0 +1,18 @@
+id: "01-web-juiceshop"
+title: "웹 해킹 입문 · OWASP Juice Shop"
+category: "웹 보안"
+session: 4
+difficulty: "입문"
+duration: "60분"
+summary: "일부러 취약하게 만든 쇼핑몰 웹앱에서 SQL 인젝션, XSS 등 대표 취약점을 직접 찾아본다."
+objectives:
+  - "웹 애플리케이션의 대표 취약점(OWASP Top 10) 개념 이해"
+  - "SQL 인젝션으로 로그인 우회 체험"
+  - "개발자 도구로 숨겨진 기능/데이터 관찰"
+  - "왜 입력값 검증과 안전한 인증이 필요한지 체득"
+multi_user: true
+runtime:
+  type: "docker-compose"
+  compose_file: "docker-compose.yml"
+  url: "http://localhost:3000"
+  lan_port: 3000

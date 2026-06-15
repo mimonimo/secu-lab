@@ -1,0 +1,8 @@
+# 사이트 복제 인식 실습 - 자기완결형 Flask 앱 (가상 브랜드, 로컬 전용)
+services:
+  site-clone-awareness:
+    build: ./app
+    container_name: seculab-site-clone-awareness
+    ports:
+      - "5003:5003"
+    restart: "no"
