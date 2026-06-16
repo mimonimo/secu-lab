@@ -3,18 +3,17 @@
   "use strict";
 
   const STATUS_LABEL = {
-    running: { text: "실행 중", cls: "bg-emerald-500/20 text-emerald-300" },
-    stopped: { text: "정지", cls: "bg-slate-800 text-slate-400" },
-    unavailable: { text: "Docker 미실행", cls: "bg-amber-500/20 text-amber-300" },
-    "n/a": { text: "수동", cls: "bg-slate-800 text-slate-500" },
-    loading: { text: "확인 중…", cls: "bg-slate-800 text-slate-500" },
+    running: { text: "실행 중", cls: "running" },
+    stopped: { text: "정지", cls: "stopped" },
+    unavailable: { text: "Docker 미실행", cls: "unavailable" },
+    "n/a": { text: "수동", cls: "stopped" },
+    loading: { text: "확인 중…", cls: "stopped" },
   };
 
   function applyStatus(badge, status) {
     const s = STATUS_LABEL[status] || STATUS_LABEL["n/a"];
     badge.textContent = s.text;
-    badge.className =
-      "status-badge text-[11px] px-2 py-0.5 rounded-full " + s.cls;
+    badge.className = "status-badge badge " + s.cls;
   }
 
   async function fetchStatus(id) {

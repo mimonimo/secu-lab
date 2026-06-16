@@ -1,7 +1,7 @@
 id: "01-web-juiceshop"
 title: "웹 해킹 입문 · OWASP Juice Shop"
 category: "웹 보안"
-session: 4
+session: 1
 difficulty: "입문"
 duration: "60분"
 summary: "일부러 취약하게 만든 쇼핑몰 웹앱에서 SQL 인젝션, XSS 등 대표 취약점을 직접 찾아본다."

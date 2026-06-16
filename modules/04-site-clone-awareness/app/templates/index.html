@@ -3,184 +3,173 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>사이트 복제 인식 실습</title>
+  <title>Site Cloner · secu-lab</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="stylesheet" href="/static/lab.css" />
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.6; }
-    header { background: #1e293b; padding: 1.2rem 1.5rem; border-bottom: 1px solid #334155; }
-    header h1 { font-size: 1.25rem; }
-    header p { color: #94a3b8; font-size: .85rem; }
-    main { max-width: 860px; margin: 1.5rem auto; padding: 0 1rem; }
-    section { background: #1e293b; border: 1px solid #334155; border-radius: 14px; padding: 1.5rem; margin-bottom: 1.5rem; }
-    h2 { font-size: 1.05rem; color: #38bdf8; margin-bottom: .8rem; }
-    p { margin-bottom: .7rem; }
-    .muted { color: #94a3b8; font-size: .88rem; }
-
-    /* 가짜 브라우저 프레임 */
-    .browser { border: 1px solid #475569; border-radius: 10px; overflow: hidden; margin: 1rem 0; background: #fff; }
-    .chrome { background: #e2e8f0; padding: .5rem .8rem; display: flex; align-items: center; gap: .5rem; }
-    .dots { display: flex; gap: .3rem; }
-    .dots span { width: 11px; height: 11px; border-radius: 50%; }
-    .addr { flex: 1; background: #fff; border-radius: 6px; padding: .35rem .7rem; font-family: ui-monospace, monospace; font-size: .82rem; color: #1e293b; display: flex; align-items: center; gap: .4rem; }
-    .lock-ok { color: #16a34a; } .lock-bad { color: #dc2626; }
-    .page { padding: 1.5rem; color: #1e293b; text-align: center; }
-    .bank-logo { font-size: 1.5rem; font-weight: 800; color: #1d4ed8; }
-    .bank-logo span { color: #16a34a; }
-    .page input { display: block; width: 80%; margin: .5rem auto; padding: .5rem; border: 1px solid #cbd5e1; border-radius: 6px; }
-    .page .btn { background: #1d4ed8; color: #fff; border: none; padding: .5rem 1.2rem; border-radius: 6px; margin-top: .5rem; }
-
-    button.action { background: #38bdf8; color: #0f172a; border: none; border-radius: 8px; padding: .6rem 1.1rem; font-weight: 700; cursor: pointer; }
-    button.action:hover { background: #0ea5e9; }
-    .reveal { background: #422006; border: 1px solid #92400e; color: #fde68a; border-radius: 8px; padding: 1rem; margin-top: 1rem; font-size: .88rem; display: none; }
-    .reveal.show { display: block; }
-
-    table { width: 100%; border-collapse: collapse; margin-top: .5rem; }
-    th, td { border: 1px solid #334155; padding: .55rem .7rem; text-align: left; font-size: .88rem; }
-    th { background: #334155; }
-
-    /* 퀴즈 */
-    .quiz-q { font-weight: 600; margin-bottom: .8rem; }
-    .opt { display: block; width: 100%; text-align: left; background: #0f172a; border: 1px solid #475569; color: #e2e8f0; border-radius: 8px; padding: .7rem .9rem; margin-bottom: .5rem; cursor: pointer; font-family: ui-monospace, monospace; font-size: .85rem; }
-    .opt:hover { border-color: #38bdf8; }
-    .opt.correct { background: #052e16; border-color: #16a34a; }
-    .opt.wrong { background: #450a0a; border-color: #dc2626; }
-    .feedback { margin-top: .6rem; font-size: .88rem; padding: .7rem; border-radius: 8px; display: none; }
-    .feedback.show { display: block; }
-    .feedback.ok { background: #052e16; color: #86efac; }
-    .feedback.no { background: #450a0a; color: #fca5a5; }
-    .quiz-nav { margin-top: 1rem; display: flex; justify-content: space-between; align-items: center; }
-    .score { color: #94a3b8; font-size: .85rem; }
-    ul { padding-left: 1.3rem; } li { margin-bottom: .4rem; }
+    .preview { width: 100%; height: 230px; border: 0; background: #fff; }
+    .target-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+    @media (max-width: 760px){ .target-grid { grid-template-columns: 1fr; } }
+    .opt { display:block; width:100%; text-align:left; background:var(--surface); border:1px solid var(--border-strong);
+           color:var(--text); border-radius:var(--radius-sm); padding:.7rem .9rem; margin-bottom:.5rem; cursor:pointer;
+           font-family:var(--mono); font-size:.85rem; transition:border .12s ease; }
+    .opt:hover { border-color: var(--brand); }
+    .opt.correct { background:var(--success-soft); border-color:var(--success); }
+    .opt.wrong { background:var(--danger-soft); border-color:var(--danger); }
+    .fb { margin-top:.6rem; font-size:.88rem; padding:.7rem .9rem; border-radius:var(--radius-sm); display:none; }
+    .fb.show { display:block; }
+    .fb.ok { background:var(--success-soft); color:var(--success); }
+    .fb.no { background:var(--danger-soft); color:var(--danger); }
   </style>
 </head>
 <body>
-  <header>
-    <h1>🔎 사이트 복제 인식 실습</h1>
-    <p>겉모습은 누구나 베낀다 — 그래서 '겉모습'을 믿으면 안 된다. (가상 브랜드: 한빛은행)</p>
-  </header>
+  <nav class="lab-nav">
+    <div class="lab-nav-inner">
+      <span class="lab-brand"><span class="mark">S</span>secu-lab</span>
+      <span class="faint">Site Cloner</span>
+      <span class="spacer"></span>
+      <form action="/clear" method="post"><button class="btn btn-ghost btn-sm" type="submit">초기화</button></form>
+    </div>
+  </nav>
 
-  <main>
-    <!-- 1. 복제 원리 -->
-    <section>
-      <h2>1. 복제는 왜 이렇게 쉬울까?</h2>
-      <p>웹페이지의 화면은 <b>HTML/CSS</b>로 만들어집니다. 브라우저에서 누구나
-        <b>소스 보기·페이지 저장</b>으로 그대로 가져와 똑같은 화면을 다른 주소에 띄울 수 있어요.</p>
+  <main class="lab-main wide">
+    <div class="page-head">
+      <div class="eyebrow">Attacker Workstation</div>
+      <h1>사이트 복제 · 겉모습은 1초면 베껴진다</h1>
+      <p>대상 페이지의 실제 소스를 그대로 내려받아 똑같은 복제본을 다시 띄웁니다. 복제본의 로그인 폼은 입력값을 가로채도록 바뀝니다. 화면(HTML·CSS)은 완벽히 복제되지만, <strong>주소(도메인)와 인증서는 베낄 수 없다</strong>는 점을 직접 확인하세요.</p>
+    </div>
 
-      <div class="browser">
-        <div class="chrome">
-          <div class="dots"><span style="background:#ef4444"></span><span style="background:#eab308"></span><span style="background:#22c55e"></span></div>
-          <div class="addr" id="addr">
-            <span id="lock" class="lock-ok">🔒</span>
-            <span id="url">https://www.hanbit-bank.co.kr</span>
+    <div class="callout callout-warn">
+      <strong>격리 실습.</strong> 복제 대상은 내장된 가상 브랜드와 같은 격리망 안의 대상으로 제한됩니다. 학생은 가짜 자격증명만 입력하며, 수집값은 메모리에만 잠시 보관하고 외부로 전송하지 않습니다. 이 기법을 허락 없이 실제 사이트·사람에게 쓰는 것은 범죄입니다.
+    </div>
+
+    {% if error %}
+    <div class="callout callout-danger" style="margin-top:1rem;">{{ error }}</div>
+    {% endif %}
+
+    <div class="card">
+      <div class="card-head"><span class="step">1</span><h2>복제할 대상 고르기</h2></div>
+      <p class="muted" style="margin-bottom:1rem;">아래는 내장된 '진짜' 포털입니다. 각 미리보기는 실제로 서버가 제공하는 페이지입니다. <strong>이 사이트 복제</strong>를 누르면 소스를 받아 복제본을 만듭니다.</p>
+      <div class="target-grid">
+        {% for name, t in targets.items() %}
+        <div style="border:1px solid var(--border); border-radius:var(--radius-md); overflow:hidden;">
+          <div class="browser" style="border:0; border-radius:0; box-shadow:none;">
+            <div class="browser-chrome">
+              <div class="browser-dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+              <div class="addr-bar"><svg class="lock-ok" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span class="url">{{ t.display_url }}</span></div>
+            </div>
+            <iframe class="preview" src="/target/{{ name }}" title="{{ t.brand }}"></iframe>
+          </div>
+          <div class="row-between" style="padding:.8rem 1rem; border-top:1px solid var(--border);">
+            <div><strong>{{ t.brand }}</strong><br /><span class="faint mono">{{ t.display_url }}</span></div>
+            <form action="/clone" method="post"><input type="hidden" name="target" value="{{ name }}" /><button class="btn btn-primary btn-sm" type="submit">이 사이트 복제</button></form>
           </div>
         </div>
-        <div class="page">
-          <div class="bank-logo">한빛<span>은행</span></div>
-          <p style="color:#475569;font-size:.85rem;">안전한 인터넷뱅킹</p>
-          <input placeholder="아이디" /><input placeholder="비밀번호" type="password" />
-          <button class="btn">로그인</button>
+        {% endfor %}
+      </div>
+      <hr class="hr" />
+      <form action="/clone" method="post" class="row">
+        <input name="url" placeholder="또는 격리망 주소 직접 입력 (예: http://127.0.0.1:5001/)" style="flex:1; min-width:240px;" />
+        <button class="btn btn-ghost" type="submit">URL 복제</button>
+      </form>
+      <p class="faint" style="margin-top:.5rem;">localhost·사설 IP 대상만 허용됩니다. 같은 secu-lab의 다른 실습 페이지(피싱·방명록 등)도 복제해볼 수 있습니다.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="step">2</span><h2>생성된 복제본 <span class="faint" style="font-weight:400">({{ clones|length }})</span></h2></div>
+      {% if clones %}
+      <div class="stack">
+        {% for c in clones %}
+        <div id="clone-{{ c.cid }}" style="border:1px solid var(--border); border-radius:var(--radius-md); overflow:hidden;">
+          <div class="browser" style="border:0; border-radius:0; box-shadow:none;">
+            <div class="browser-chrome">
+              <div class="browser-dots"><span style="background:#ff5f57"></span><span style="background:#febc2e"></span><span style="background:#28c840"></span></div>
+              <div class="addr-bar"><svg class="lock-bad" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10.3 3.3-8 14A2 2 0 0 0 4 20h16a2 2 0 0 0 1.7-2.7l-8-14a2 2 0 0 0-3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><span class="url">{{ c.spoof }}</span></div>
+            </div>
+            <iframe class="preview" src="/clone/{{ c.cid }}" title="복제본"></iframe>
+          </div>
+          <div class="row-between" style="padding:.8rem 1rem; border-top:1px solid var(--border);">
+            <div>
+              <span class="badge badge-danger"><span class="dot"></span>복제본 · {{ c.brand }}</span>
+              <div class="faint" style="margin-top:.4rem;">피해자에게 보낼 링크: <a class="mono" href="{{ c.link }}" target="_blank">{{ c.link }}</a></div>
+            </div>
+            <a class="btn btn-ghost btn-sm" href="{{ c.link }}" target="_blank">복제본 열기</a>
+          </div>
         </div>
+        {% endfor %}
       </div>
+      <p class="faint" style="margin-top:1rem;">실제 공격자라면 이 복제본을 진짜와 비슷한 도메인(예: <code>hanbitbank-event.com</code>)을 사서 올립니다. 화면은 똑같지만 <strong>주소만 다릅니다</strong>. 직접 복제본을 열어 로그인해 보고, 아래 수집함을 확인하세요.</p>
+      {% else %}
+      <p class="muted">아직 만든 복제본이 없습니다. 위에서 대상을 골라 복제하세요.</p>
+      {% endif %}
+    </div>
 
-      <button class="action" onclick="cloneIt()">🖱️ 이 사이트 '겉모습' 복제해보기</button>
-      <div class="reveal" id="cloneReveal">
-        방금 <b>완전히 똑같은 화면</b>이 떴지만, 주소창을 보세요 →
-        <code id="urlNote"></code><br />
-        화면(HTML/CSS)은 1초면 복제됩니다. <b>하지만 주소(도메인)와 HTTPS 인증서는 함부로 못 베낍니다.</b>
-        그래서 진짜/가짜는 <b>겉모습이 아니라 주소창</b>에서 갈립니다.
-      </div>
-    </section>
-
-    <!-- 2. 진짜는 못 베끼는 것 -->
-    <section>
-      <h2>2. 겉모습 vs 진짜로 확인할 것</h2>
+    <div class="card">
+      <div class="card-head"><span class="step">3</span><h2>수집된 자격증명 <span class="faint" style="font-weight:400">({{ harvest|length }})</span></h2></div>
+      {% if harvest %}
       <table>
-        <tr><th>쉽게 복제됨 (믿으면 안 됨)</th><th>위조 어려움 (확인 기준)</th></tr>
-        <tr><td>로고, 디자인, 글자, 레이아웃</td><td><b>도메인 이름</b> (정확한 철자)</td></tr>
-        <tr><td>버튼, 색깔, 이미지</td><td><b>HTTPS 인증서</b> (자물쇠 → 발급 대상)</td></tr>
-        <tr><td>"보안" 같은 안심 문구</td><td><b>유입 경로</b> (직접 입력했나, 링크 타고 왔나)</td></tr>
+        <thead><tr><th>시각</th><th>복제본 주소</th><th>입력값</th><th>IP</th></tr></thead>
+        <tbody>
+          {% for h in harvest %}
+          <tr>
+            <td class="mono faint">{{ h.time }}</td>
+            <td class="mono" style="color:var(--danger)">{{ h.spoof }}</td>
+            <td>
+              {% for it in h.fields %}
+              <div class="mono" style="font-size:.84rem;"><span class="faint">{{ it.name }}:</span> {{ it.value }} <span class="faint">({{ it.len }}자)</span></div>
+              {% endfor %}
+            </td>
+            <td class="mono faint">{{ h.ip }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
       </table>
-    </section>
+      {% else %}
+      <p class="muted">아직 수집된 입력이 없습니다. 복제본을 열어 로그인을 시도하면 여기에 쌓입니다.</p>
+      {% endif %}
+      <div class="callout callout-info" style="margin-top:1rem;">입력값은 그대로 수집됩니다(학생은 가짜 값만 입력). 수집 직후 피해자는 진짜 사이트로 넘어가 이상을 눈치채기 어렵습니다.</div>
+    </div>
 
-    <!-- 3. 퀴즈 -->
-    <section>
-      <h2>3. 스팟 더 페이크 · 어느 쪽이 가짜일까?</h2>
-      <div id="quiz">
-        <div class="quiz-q" id="qText"></div>
-        <div id="opts"></div>
-        <div class="feedback" id="fb"></div>
-        <div class="quiz-nav">
-          <span class="score" id="score"></span>
-          <button class="action" id="nextBtn" onclick="nextQ()" style="display:none">다음 →</button>
-        </div>
+    <div class="card">
+      <div class="card-head"><span class="step">4</span><h2>그래서, 진짜와 가짜는 무엇으로 가리나</h2></div>
+      <table>
+        <thead><tr><th>쉽게 복제됨 — 믿으면 안 됨</th><th>위조 어려움 — 확인 기준</th></tr></thead>
+        <tbody>
+          <tr><td>로고·디자인·글자·레이아웃</td><td><strong>도메인 이름</strong> (정확한 철자)</td></tr>
+          <tr><td>버튼·색상·이미지</td><td><strong>HTTPS 인증서</strong> (자물쇠 → 발급 대상)</td></tr>
+          <tr><td>"보안" 같은 안심 문구</td><td><strong>유입 경로</strong> (직접 입력했나, 링크 타고 왔나)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><span class="step">5</span><h2>가짜를 가려내는 눈 · 미니 퀴즈</h2></div>
+      <div class="quiz-q" id="qText" style="font-weight:700; margin-bottom:.8rem;"></div>
+      <div id="opts"></div>
+      <div class="fb" id="fb"></div>
+      <div class="row-between" style="margin-top:1rem;">
+        <span class="faint" id="score"></span>
+        <button class="btn btn-primary btn-sm" id="nextBtn" onclick="nextQ()" style="display:none">다음 →</button>
       </div>
-    </section>
-
-    <!-- 4. 체크리스트 -->
-    <section>
-      <h2>4. 가짜를 거르는 습관</h2>
-      <ul>
-        <li>로그인 전에 <b>주소창의 도메인 철자</b>를 또박또박 읽는다. (<code>hanbit-bank</code> vs <code>hanbit-bamk</code>)</li>
-        <li>로그인 페이지가 <b>http</b>이거나 자물쇠가 없으면 멈춘다.</li>
-        <li>문자/메일 <b>링크로 들어온 로그인</b>은 의심하고, 앱·즐겨찾기·직접 입력으로 들어간다.</li>
-        <li>"지금 안 하면 계정 정지" 같은 <b>급한 압박</b>은 전형적 미끼.</li>
-        <li>똑같이 생겼다고 안심하지 않는다 — <b>겉모습은 증거가 아니다.</b></li>
-      </ul>
-    </section>
+    </div>
   </main>
 
   <script>
-    // --- 복제 시연 ---
-    let cloned = false;
-    function cloneIt() {
-      const url = document.getElementById('url');
-      const lock = document.getElementById('lock');
-      const reveal = document.getElementById('cloneReveal');
-      const note = document.getElementById('urlNote');
-      if (!cloned) {
-        url.textContent = 'http://hanbit-bank-event.com/login';
-        lock.textContent = '⚠️';
-        lock.className = 'lock-bad';
-        note.textContent = 'http://hanbit-bank-event.com  (진짜와 다른 가짜 도메인!)';
-        reveal.classList.add('show');
-        cloned = true;
-      } else {
-        url.textContent = 'https://www.hanbit-bank.co.kr';
-        lock.textContent = '🔒';
-        lock.className = 'lock-ok';
-        reveal.classList.remove('show');
-        cloned = false;
-      }
-    }
-
-    // --- 퀴즈 ---
     const QUESTIONS = [
-      {
-        q: "한빛은행 진짜 주소는 hanbit-bank.co.kr 입니다. 다음 중 가짜(피싱) 사이트는?",
-        opts: ["https://www.hanbit-bank.co.kr", "https://www.hanbit-bamk.co.kr"],
-        answer: 1,
-        why: "'bank'가 'bamk'로 바뀌었습니다. 비슷한 철자로 속이는 전형적 수법(타이포스쿼팅)."
-      },
-      {
-        q: "로그인 페이지로 적절한 것은?",
-        opts: ["http://hanbit-bank.co.kr/login (자물쇠 없음)", "https://hanbit-bank.co.kr/login (자물쇠 있음)"],
-        answer: 0,
-        why: "로그인처럼 민감한 페이지가 http(자물쇠 없음)이면 위험 신호입니다. https가 정상."
-      },
-      {
-        q: "다음 중 가짜일 가능성이 높은 주소는?",
-        opts: ["https://hanbit-bank.co.kr", "https://hanbit-bank.security-login.com"],
-        answer: 1,
-        why: "진짜 도메인은 맨 끝(최상위) 부분입니다. 이 주소의 실제 도메인은 security-login.com 이고 hanbit-bank는 미끼로 앞에 붙였을 뿐입니다."
-      },
-      {
-        q: "문자로 '계정 확인 필요'라며 링크가 왔습니다. 가장 안전한 행동은?",
-        opts: ["링크를 눌러 바로 로그인한다", "링크 무시하고 은행 앱/공식 사이트에 직접 들어가 확인한다"],
-        answer: 1,
-        why: "링크는 가짜 사이트로 유도할 수 있습니다. 항상 직접 공식 경로로 접속해 확인하세요."
-      }
+      { q: "한빛은행 진짜 주소는 hanbitbank.co.kr 입니다. 다음 중 가짜(피싱) 사이트는?",
+        opts: ["https://www.hanbitbank.co.kr", "https://www.hanbitbamk.co.kr"], answer: 1,
+        why: "'bank'가 'bamk'로 바뀌었습니다. 비슷한 철자로 속이는 전형적 수법(타이포스쿼팅)." },
+      { q: "로그인 페이지로 안전한 것은?",
+        opts: ["http://hanbitbank.co.kr/login (자물쇠 없음)", "https://hanbitbank.co.kr/login (자물쇠 있음)"], answer: 1,
+        why: "로그인처럼 민감한 페이지가 http(자물쇠 없음)이면 위험 신호입니다." },
+      { q: "다음 중 가짜일 가능성이 높은 주소는?",
+        opts: ["https://hanbitbank.co.kr", "https://hanbitbank.security-login.com"], answer: 1,
+        why: "진짜 도메인은 맨 끝 두 덩어리입니다. 이 주소의 실제 주인은 security-login.com 이고, hanbitbank는 미끼로 앞에 붙였을 뿐입니다." },
+      { q: "문자로 '계정 확인 필요'라며 링크가 왔습니다. 가장 안전한 행동은?",
+        opts: ["링크를 눌러 바로 로그인한다", "링크는 무시하고 앱·즐겨찾기로 직접 들어가 확인한다"], answer: 1,
+        why: "링크는 복제본으로 유도할 수 있습니다. 항상 직접 공식 경로로 접속해 확인하세요." },
     ];
-
     let qi = 0, score = 0, answered = false;
     function renderQ() {
       answered = false;
@@ -190,12 +179,10 @@
       opts.innerHTML = '';
       Q.opts.forEach((text, i) => {
         const b = document.createElement('button');
-        b.className = 'opt';
-        b.textContent = text;
-        b.onclick = () => choose(i, b);
+        b.className = 'opt'; b.textContent = text; b.onclick = () => choose(i, b);
         opts.appendChild(b);
       });
-      document.getElementById('fb').className = 'feedback';
+      document.getElementById('fb').className = 'fb';
       document.getElementById('nextBtn').style.display = 'none';
       updateScore();
     }
@@ -206,21 +193,10 @@
       const fb = document.getElementById('fb');
       const all = document.querySelectorAll('.opt');
       all[Q.answer].classList.add('correct');
-      if (i === Q.answer) {
-        score++;
-        fb.className = 'feedback ok show';
-        fb.textContent = '⭕ 정답! ' + Q.why;
-      } else {
-        btn.classList.add('wrong');
-        fb.className = 'feedback no show';
-        fb.textContent = '❌ 아쉬워요. ' + Q.why;
-      }
-      document.getElementById('nextBtn').style.display = qi < QUESTIONS.length - 1 ? 'inline-block' : 'none';
-      if (qi === QUESTIONS.length - 1) {
-        setTimeout(() => {
-          fb.textContent += `  ▶ 최종 점수: ${score}/${QUESTIONS.length}`;
-        }, 100);
-      }
+      if (i === Q.answer) { score++; fb.className = 'fb ok show'; fb.textContent = '정답! ' + Q.why; }
+      else { btn.classList.add('wrong'); fb.className = 'fb no show'; fb.textContent = '아쉬워요. ' + Q.why; }
+      document.getElementById('nextBtn').style.display = qi < QUESTIONS.length - 1 ? 'inline-flex' : 'none';
+      if (qi === QUESTIONS.length - 1) setTimeout(() => { fb.textContent += `  ▶ 최종 점수 ${score}/${QUESTIONS.length}`; }, 80);
       updateScore();
     }
     function nextQ() { if (qi < QUESTIONS.length - 1) { qi++; renderQ(); } }

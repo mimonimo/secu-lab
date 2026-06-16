@@ -4,51 +4,34 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}TalkSpot{% endblock %}</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="stylesheet" href="/static/lab.css" />
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #f1f5f9; color: #1e293b; }
-    nav { background: #0ea5e9; color: #fff; padding: .8rem 1.2rem; display: flex; align-items: center; gap: 1rem; }
-    nav .brand { font-weight: 800; font-size: 1.1rem; }
-    nav a { color: #e0f2fe; text-decoration: none; font-size: .9rem; }
-    nav a:hover { color: #fff; text-decoration: underline; }
-    nav .spacer { flex: 1; }
-    .mode { font-size: .75rem; padding: .2rem .6rem; border-radius: 999px; }
-    .mode.safe { background: #16a34a; }
-    .mode.vuln { background: #dc2626; }
-    main { max-width: 720px; margin: 1.5rem auto; padding: 0 1rem; }
-    .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.2rem; }
-    h1 { font-size: 1.3rem; margin-bottom: .5rem; }
-    h2 { font-size: 1rem; color: #0ea5e9; margin-bottom: .6rem; }
-    input, textarea { width: 100%; padding: .6rem .8rem; border: 1px solid #cbd5e1; border-radius: 8px; font-size: .95rem; font-family: inherit; }
-    label { display: block; font-size: .8rem; color: #475569; margin: .8rem 0 .3rem; }
-    button { background: #0ea5e9; color: #fff; border: none; border-radius: 8px; padding: .6rem 1.1rem; font-size: .95rem; font-weight: 600; cursor: pointer; margin-top: 1rem; }
-    button:hover { background: #0284c7; }
-    button.danger { background: #dc2626; } button.danger:hover { background: #b91c1c; }
-    button.ghost { background: #e2e8f0; color: #1e293b; } button.ghost:hover { background: #cbd5e1; }
-    .comment { border-bottom: 1px solid #e2e8f0; padding: .8rem 0; }
-    .comment .meta { font-size: .75rem; color: #94a3b8; margin-bottom: .3rem; }
-    code { background: #0f172a; color: #7dd3fc; padding: .15em .4em; border-radius: 4px; font-size: .85em; }
-    pre { background: #0f172a; color: #e2e8f0; padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: .85rem; }
-    table { width: 100%; border-collapse: collapse; }
-    th, td { padding: .5rem .7rem; border-bottom: 1px solid #e2e8f0; text-align: left; font-size: .85rem; }
-    th { background: #f8fafc; }
-    .v { font-family: ui-monospace, monospace; color: #b91c1c; word-break: break-all; }
-    .hint { font-size: .8rem; color: #64748b; margin-top: .5rem; }
-    .badge { display: inline-block; background: #fef3c7; color: #92400e; font-size: .75rem; padding: .2rem .6rem; border-radius: 999px; }
+    .ts-nav-link { padding: .3rem .1rem; }
+    .ts-nav-link.active { color: var(--brand); font-weight: 700; }
+    .comment-item { padding: .9rem 0; border-bottom: 1px solid var(--border); }
+    .comment-item:last-child { border-bottom: none; }
+    .comment-meta { font-size: .78rem; color: var(--faint); margin-bottom: .35rem; }
   </style>
 </head>
 <body>
-  <nav>
-    <span class="brand">💬 TalkSpot</span>
-    <a href="/">홈</a>
-    <a href="/board">방명록</a>
-    <a href="/mypage">마이페이지</a>
-    <a href="/attacker">공격자 화면</a>
-    <span class="spacer"></span>
-    {% if safe_mode %}<span class="mode safe">🛡️ 안전 모드</span>
-    {% else %}<span class="mode vuln">⚠️ 취약 모드</span>{% endif %}
+  <nav class="lab-nav">
+    <div class="lab-nav-inner">
+      <span class="lab-brand"><span class="mark">T</span>TalkSpot</span>
+      <a class="ts-nav-link" href="/">홈</a>
+      <a class="ts-nav-link" href="/board">방명록</a>
+      <a class="ts-nav-link" href="/mypage">마이페이지</a>
+      <a class="ts-nav-link" href="/attacker">공격자 콘솔</a>
+      <span class="spacer"></span>
+      {% if safe_mode %}
+        <span class="badge badge-success"><span class="dot"></span>안전 모드</span>
+      {% else %}
+        <span class="badge badge-danger"><span class="dot"></span>취약 모드</span>
+      {% endif %}
+    </div>
   </nav>
-  <main>
+  <main class="lab-main">
     {% block body %}{% endblock %}
   </main>
 </body>

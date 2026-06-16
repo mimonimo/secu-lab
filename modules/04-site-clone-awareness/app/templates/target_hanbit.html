@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>한빛은행 인터넷뱅킹</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Pretendard Variable", Pretendard, -apple-system, "Segoe UI", sans-serif; background: #eef1f5; color: #1a2233; }
+    .topbar { background: #fff; border-bottom: 1px solid #e2e7ee; }
+    .topbar .inner { max-width: 980px; margin: 0 auto; padding: .9rem 1.5rem; display: flex; align-items: center; gap: 1.5rem; }
+    .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -.03em; color: #0b4ea2; }
+    .logo b { color: #00a05a; }
+    .topnav { display: flex; gap: 1.3rem; font-size: .9rem; color: #4a5568; margin-left: 1rem; }
+    .topnav span:first-child { color: #0b4ea2; font-weight: 700; }
+    .topbar .right { margin-left: auto; font-size: .8rem; color: #8a93a3; }
+    .hero { background: linear-gradient(180deg, #0b4ea2, #0a4691); color: #fff; }
+    .hero .inner { max-width: 980px; margin: 0 auto; padding: 2.4rem 1.5rem; display: grid; grid-template-columns: 1.2fr .9fr; gap: 2rem; align-items: center; }
+    .hero h1 { font-size: 1.7rem; font-weight: 800; line-height: 1.4; letter-spacing: -.02em; }
+    .hero p { color: #cfe0f5; margin-top: .7rem; font-size: .95rem; }
+    .login-card { background: #fff; border-radius: 14px; padding: 1.6rem; color: #1a2233; box-shadow: 0 14px 40px rgba(0,0,0,.22); }
+    .login-card h2 { font-size: 1.05rem; margin-bottom: 1rem; }
+    .login-card label { display: block; font-size: .8rem; color: #5a6473; margin: .8rem 0 .35rem; font-weight: 600; }
+    .login-card input { width: 100%; padding: .8rem .85rem; border: 1px solid #cfd6e0; border-radius: 9px; font-size: .98rem; font-family: inherit; }
+    .login-card input:focus { outline: none; border-color: #0b4ea2; box-shadow: 0 0 0 3px rgba(11,78,162,.14); }
+    .login-card button { width: 100%; margin-top: 1.2rem; padding: .85rem; border: none; border-radius: 9px; background: #0b4ea2; color: #fff; font-size: 1.02rem; font-weight: 700; cursor: pointer; }
+    .login-card button:hover { background: #0a4691; }
+    .login-card .sub { display: flex; justify-content: center; gap: .6rem; font-size: .8rem; color: #8a93a3; margin-top: 1rem; }
+    .secure { display: flex; align-items: center; gap: .4rem; font-size: .78rem; color: #00a05a; margin-top: .9rem; justify-content: center; }
+    .foot { max-width: 980px; margin: 0 auto; padding: 1.5rem; font-size: .75rem; color: #98a1b0; line-height: 1.7; }
+    @media (max-width: 760px){ .hero .inner{ grid-template-columns:1fr; } .topnav{ display:none; } }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="inner">
+      <span class="logo">한빛<b>은행</b></span>
+      <nav class="topnav"><span>개인</span><span>기업</span><span>카드</span><span>대출</span><span>고객센터</span></nav>
+      <span class="right">로그인 / 회원가입</span>
+    </div>
+  </div>
+  <div class="hero">
+    <div class="inner">
+      <div>
+        <h1>언제 어디서나 안전한<br />한빛 인터넷뱅킹</h1>
+        <p>금융결제원 인증, 보안카드·OTP로 안전하게 보호됩니다. 지금 로그인하고 이용하세요.</p>
+      </div>
+      <div class="login-card">
+        <h2>인터넷뱅킹 로그인</h2>
+        <form action="/target-login" method="post">
+          <label for="uid">아이디</label>
+          <input id="uid" name="username" autocomplete="off" placeholder="아이디 입력" required />
+          <label for="pw">비밀번호</label>
+          <input id="pw" name="password" type="password" autocomplete="off" placeholder="비밀번호 입력" required />
+          <button type="submit">로그인</button>
+        </form>
+        <div class="secure"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> 이 페이지는 SSL로 보호됩니다</div>
+        <div class="sub"><span>아이디 찾기</span>·<span>비밀번호 찾기</span>·<span>회원가입</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    한빛은행 | 서울특별시 중구 세종대로 00 | 사업자등록번호 000-00-00000<br />
+    본 사이트는 교육용으로 제작된 가상의 브랜드이며 실제 금융기관과 무관합니다.
+  </div>
+</body>
+</html>

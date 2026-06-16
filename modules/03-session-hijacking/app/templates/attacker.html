@@ -1,30 +1,38 @@
 {% extends "base.html" %}
-{% block title %}TalkSpot · 공격자 화면{% endblock %}
+{% block title %}TalkSpot · 공격자 콘솔{% endblock %}
 {% block body %}
+<div class="page-head">
+  <div class="eyebrow">Attacker Console</div>
+  <h1>공격자 수집함</h1>
+  <p>방명록에 심은 스크립트가 그 글을 본 사람들의 세션 쿠키를 여기로 보냅니다. (전송 대상은 이 로컬 서버뿐입니다.)</p>
+</div>
+
 <div class="card">
-  <h1>🕵️ 공격자 수집함</h1>
-  <p class="hint">방명록에 심은 XSS 페이로드가 사용자들의 쿠키를 여기로 보냅니다. (로컬 전용)</p>
+  <div class="row-between" style="margin-bottom:1rem;">
+    <h2>탈취된 쿠키 <span class="faint">({{ stolen|length }}건)</span></h2>
+    <span class="badge badge-danger"><span class="dot"></span>수집 중</span>
+  </div>
   {% if stolen %}
   <table>
     <thead><tr><th>시각</th><th>탈취된 쿠키</th><th>IP</th></tr></thead>
     <tbody>
       {% for s in stolen %}
-      <tr><td>{{ s.time }}</td><td class="v">{{ s.cookie }}</td><td>{{ s.ip }}</td></tr>
+      <tr><td class="mono faint">{{ s.time }}</td><td class="mono" style="color:var(--danger);word-break:break-all">{{ s.cookie }}</td><td class="mono faint">{{ s.ip }}</td></tr>
       {% endfor %}
     </tbody>
   </table>
   {% else %}
-  <p class="hint">아직 탈취된 쿠키가 없습니다. 방명록에 페이로드를 등록한 뒤 누군가 방명록을 열면 여기에 쌓입니다.</p>
+  <p class="muted">아직 수집된 쿠키가 없습니다. 방명록에 페이로드를 등록한 뒤, 누군가 방명록을 열면 여기에 쌓입니다.</p>
   {% endif %}
 </div>
 
 <div class="card">
-  <h2>🔓 세션 하이재킹: 훔친 쿠키로 로그인하기</h2>
-  <p class="hint">위에서 탈취한 쿠키 값을 붙여넣고 실행하면, 그 사람으로 로그인됩니다.</p>
+  <div class="card-head"><span class="step">→</span><h2>세션 하이재킹 · 훔친 쿠키로 로그인</h2></div>
+  <p class="muted" style="margin-bottom:.5rem;">위에서 수집한 쿠키 값을 붙여넣고 실행하면, 비밀번호 없이 그 사람으로 로그인됩니다.</p>
   <form action="/hijack" method="post">
-    <label for="cookie">탈취한 쿠키 (예: <code>sid=abcd1234...</code> 또는 토큰만)</label>
+    <label for="cookie">탈취한 쿠키 (예: <code>sid=abcd1234…</code> 또는 토큰만)</label>
     <input id="cookie" name="cookie" placeholder="sid=..." />
-    <button type="submit" class="danger">이 쿠키로 로그인 → 마이페이지</button>
+    <button type="submit" class="btn btn-danger" style="margin-top:1rem;">이 쿠키로 로그인 → 마이페이지</button>
   </form>
 </div>
 {% endblock %}

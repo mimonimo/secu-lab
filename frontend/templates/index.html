@@ -3,84 +3,109 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>secu-lab · 보안 실습 관제</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="/static/style.css" />
+  <title>secu-lab · 정보보안 실습 콘솔</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="stylesheet" href="/static/dashboard.css" />
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen">
-  <header class="border-b border-slate-800 bg-slate-900/60 backdrop-blur sticky top-0 z-10">
-    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <span class="text-2xl">🛡️</span>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="m10.3 3.3-8 14A2 2 0 0 0 4 20h16a2 2 0 0 0 1.7-2.7l-8-14a2 2 0 0 0-3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></symbol>
+    <symbol id="i-stop" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
+    <symbol id="i-gauge" viewBox="0 0 24 24"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></symbol>
+  </svg>
+
+  <header class="nav">
+    <div class="nav-inner">
+      <div class="brand">
+        <span class="mark"><svg class="icon"><use href="#i-shield"/></svg></span>
         <div>
-          <h1 class="text-xl font-bold tracking-tight">secu-lab</h1>
-          <p class="text-xs text-slate-400">보안 실습 관제 플랫폼 · 진로 체험용</p>
+          <h1>secu-lab</h1>
+          <p>정보보안 실습 콘솔 · 진로 체험 과정</p>
         </div>
       </div>
-      <div class="text-right text-xs">
-        <div class="flex items-center gap-2 justify-end">
-          <span class="w-2 h-2 rounded-full {{ 'bg-emerald-400' if docker_ok else 'bg-rose-500' }}"></span>
-          <span class="text-slate-300">Docker {{ '사용 가능' if docker_ok else '미실행' }}</span>
-        </div>
-        <div class="text-slate-500 mt-1">학생 접속 IP: <span class="font-mono text-slate-300">{{ lan_ip }}</span></div>
+      <div class="nav-meta">
+        <span class="status-pill {{ 'ok' if docker_ok else 'bad' }}">
+          <span class="dot"></span>Docker {{ '연결됨' if docker_ok else '미실행' }}
+        </span>
+        <div class="ip">학생 접속 IP <b>{{ lan_ip }}</b></div>
       </div>
     </div>
   </header>
 
-  <main class="max-w-6xl mx-auto px-6 py-8">
+  <main class="main">
+    <section class="intro">
+      <p class="eyebrow">Hands-on Security</p>
+      <h2>공격을 이해해야, 제대로 방어한다</h2>
+      <p>실제 취약점을 직접 다뤄보며 웹·계정 보안의 원리를 익히는 4회차 실습 과정입니다. 각 실습은 학생들이 자기 노트북에서 직접 손으로 진행합니다.</p>
+    </section>
+
     {% if not docker_ok %}
-    <div class="mb-6 rounded-lg border border-amber-600/40 bg-amber-500/10 px-4 py-3 text-amber-200 text-sm">
-      ⚠️ Docker가 감지되지 않았습니다. Docker 기반 실습을 켜려면 <b>Docker Desktop</b>을 실행하세요.
+    <div class="banner warn">
+      <svg class="icon"><use href="#i-alert"/></svg>
+      <span><b>Docker가 감지되지 않았습니다.</b> Docker 기반 실습을 시작하려면 Docker Desktop을 실행하세요.</span>
     </div>
     {% endif %}
 
-    <div class="mb-6 rounded-lg border border-sky-700/40 bg-sky-500/5 px-4 py-3 text-sky-200/90 text-sm">
-      🔒 모든 실습은 <b>로컬/LAN 격리 환경</b>에서만 동작합니다. 실제 외부 서비스나 타인의 정보를 대상으로 하지 않습니다.
+    <div class="banner info">
+      <svg class="icon"><use href="#i-lock"/></svg>
+      <span>모든 실습은 <b>로컬·LAN 격리 환경</b>에서만 동작합니다. 실제 외부 서비스나 타인의 정보를 대상으로 하지 않으며, 인터넷(공인 IP)에 노출하지 마세요.</span>
     </div>
 
-    <div class="flex items-center justify-between mb-4">
-      <h2 class="text-lg font-semibold">실습 모듈 <span class="text-slate-500 text-sm">({{ total }}개)</span></h2>
-    </div>
+    {% if sessions %}
+    <ol class="stepper">
+      {% for s in sessions %}
+      <li class="step-card">
+        <div><span class="n">{{ s.session if s.session is not none else '·' }}</span><span class="lbl">{{ s.label }}</span></div>
+        <div class="ttl">{{ s.title or '실습' }}</div>
+      </li>
+      {% endfor %}
+    </ol>
+    {% endif %}
+
+    <h3 class="sec-title">실습 모듈 <span class="count">({{ total }})</span></h3>
 
     {% if total == 0 %}
-    <div class="rounded-lg border border-slate-800 bg-slate-900/40 p-8 text-center text-slate-400">
-      등록된 모듈이 없습니다. <code class="text-slate-300">modules/</code> 폴더에 모듈을 추가하세요.
-    </div>
+    <div class="empty">등록된 모듈이 없습니다. <code>modules/</code> 폴더에 모듈을 추가하세요.</div>
     {% endif %}
 
     {% for s in sessions %}
-    <section class="mb-8">
-      <div class="flex items-baseline gap-3 mb-1">
-        <h3 class="text-sm font-semibold text-sky-300 uppercase tracking-wide">{{ s.label }}</h3>
-        {% if s.title %}<span class="text-slate-100 font-semibold">{{ s.title }}</span>{% endif %}
+    <section class="session">
+      <div class="session-head">
+        <span class="n">{{ s.session if s.session is not none else '·' }}</span>
+        <span class="lbl">{{ s.label }}</span>
+        {% if s.title %}<span class="ttl">{{ s.title }}</span>{% endif %}
       </div>
-      {% if s.goal %}<p class="text-xs text-slate-400 mb-3">🎯 {{ s.goal }}</p>{% else %}<div class="mb-3"></div>{% endif %}
-      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {% if s.goal %}<p class="session-goal">{{ s.goal }}</p>{% endif %}
+      <div class="grid">
         {% for m in s.modules %}
-        <article class="group rounded-xl border border-slate-800 bg-slate-900/50 p-5 hover:border-sky-600/50 transition flex flex-col"
-                 data-module-id="{{ m.id }}">
-          <div class="flex items-start justify-between gap-2 mb-2">
-            <span class="text-[11px] font-medium px-2 py-0.5 rounded-full bg-slate-800 text-slate-300">{{ m.category }}</span>
-            <span class="status-badge text-[11px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-400">…</span>
+        <article class="mod-card" data-module-id="{{ m.id }}">
+          <div class="top">
+            <span class="chip">{{ m.category }}</span>
+            <span class="status-badge badge">…</span>
           </div>
-          <a href="/module/{{ m.id }}" class="block">
-            <h4 class="font-semibold leading-snug group-hover:text-sky-300 transition">{{ m.title }}</h4>
-          </a>
-          <p class="text-sm text-slate-400 mt-1 flex-1">{{ m.summary }}</p>
-          <div class="flex items-center gap-2 mt-3 text-[11px] text-slate-500">
-            <span>📊 {{ m.difficulty }}</span>
-            {% if m.duration %}<span>· ⏱ {{ m.duration }}</span>{% endif %}
-            {% if m.multi_user %}<span>· 👥 멀티</span>{% endif %}
+          <a href="/module/{{ m.id }}"><h3>{{ m.title }}</h3></a>
+          <p class="desc">{{ m.summary }}</p>
+          <div class="mod-meta">
+            <span class="mi"><svg class="icon"><use href="#i-gauge"/></svg>{{ m.difficulty }}</span>
+            {% if m.duration %}<span class="sep">·</span><span class="mi"><svg class="icon"><use href="#i-clock"/></svg>{{ m.duration }}</span>{% endif %}
+            {% if m.multi_user %}<span class="sep">·</span><span class="mi"><svg class="icon"><use href="#i-users"/></svg>핸즈온</span>{% endif %}
           </div>
-          <div class="flex gap-2 mt-4">
+          <div class="actions">
             {% if m.runtime.type == 'docker-compose' %}
-            <button class="btn-start flex-1 text-sm font-medium rounded-lg bg-emerald-600 hover:bg-emerald-500 px-3 py-2 transition disabled:opacity-40">시작</button>
-            <button class="btn-stop flex-1 text-sm font-medium rounded-lg bg-slate-700 hover:bg-rose-600 px-3 py-2 transition disabled:opacity-40">종료</button>
+            <button class="btn btn-primary btn-flex btn-start"><svg class="icon"><use href="#i-play"/></svg>시작</button>
+            <button class="btn btn-soft danger-hover btn-flex btn-stop"><svg class="icon"><use href="#i-stop"/></svg>종료</button>
             {% else %}
-            <a href="/module/{{ m.id }}" class="flex-1 text-center text-sm font-medium rounded-lg bg-slate-700 hover:bg-slate-600 px-3 py-2 transition">가이드 보기</a>
+            <a href="/module/{{ m.id }}" class="btn btn-soft btn-flex">가이드 보기</a>
             {% endif %}
           </div>
-          <a href="/module/{{ m.id }}" class="text-xs text-sky-400/80 hover:text-sky-300 mt-2 text-center">상세 가이드 →</a>
+          <a href="/module/{{ m.id }}" class="card-link">상세 가이드 <svg class="icon"><use href="#i-arrow"/></svg></a>
         </article>
         {% endfor %}
       </div>
@@ -88,34 +113,10 @@
     {% endfor %}
   </main>
 
-  <footer class="border-t border-slate-800 mt-12">
-    <div class="max-w-6xl mx-auto px-6 py-4 text-xs text-slate-500">
-      secu-lab · 교육 목적 전용 · 격리 환경에서만 사용하세요
-    </div>
+  <footer class="foot">
+    <div class="foot-inner">secu-lab · 교육 목적 전용 · 격리 환경에서만 사용하세요</div>
   </footer>
 
-  <!-- 강사용 수업 타이머 위젯 -->
-  <div id="timer-widget" class="fixed bottom-4 right-4 z-20 w-60 rounded-xl border border-slate-700 bg-slate-900/95 shadow-2xl backdrop-blur p-4">
-    <div class="flex items-center justify-between mb-2">
-      <span class="text-xs font-semibold text-sky-300">⏱ 수업 타이머</span>
-      <button id="timer-collapse" class="text-slate-500 hover:text-slate-200 text-xs">─</button>
-    </div>
-    <div id="timer-body">
-      <div id="timer-display" class="text-center text-4xl font-mono font-bold tracking-tight my-2 text-slate-100">10:00</div>
-      <div class="flex gap-1 mb-2">
-        <button class="timer-preset flex-1 text-xs rounded bg-slate-800 hover:bg-slate-700 py-1" data-min="5">5분</button>
-        <button class="timer-preset flex-1 text-xs rounded bg-slate-800 hover:bg-slate-700 py-1" data-min="10">10분</button>
-        <button class="timer-preset flex-1 text-xs rounded bg-slate-800 hover:bg-slate-700 py-1" data-min="20">20분</button>
-        <button class="timer-preset flex-1 text-xs rounded bg-slate-800 hover:bg-slate-700 py-1" data-min="40">40분</button>
-      </div>
-      <div class="flex gap-2">
-        <button id="timer-start" class="flex-1 text-sm font-medium rounded-lg bg-emerald-600 hover:bg-emerald-500 py-1.5">시작</button>
-        <button id="timer-reset" class="flex-1 text-sm font-medium rounded-lg bg-slate-700 hover:bg-slate-600 py-1.5">리셋</button>
-      </div>
-    </div>
-  </div>
-
-  <script src="/static/timer.js"></script>
   <script src="/static/app.js"></script>
 </body>
 </html>

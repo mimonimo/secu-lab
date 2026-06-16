@@ -4,7 +4,7 @@
 설계 원칙 (안전):
 - 가상의 브랜드 'SkyBird'를 사용. 실제 서비스(인스타그램 등)를 사칭하지 않음.
 - 입력값을 외부로 전송하지 않음. 디스크에 영구 저장하지 않음.
-- 비밀번호는 폭로 화면에서 마스킹하여, 평문 자격증명을 그대로 수집/노출하지 않음.
+- 학생은 가짜 비밀번호만 입력하므로, 공격자가 받는 값을 그대로 보여주어 위험을 실감하게 함.
 - 로그인 시도 즉시 '이것은 피싱입니다' 폭로 화면으로 이동하여 식별법을 교육.
 - 메모리에 최근 시도만 잠시 보관(강사 시연용), 컨테이너 종료 시 모두 사라짐.
 
@@ -22,15 +22,6 @@ app = Flask(__name__)
 ATTEMPTS: deque = deque(maxlen=20)
 
 
-def mask_password(pw: str) -> str:
-    """비밀번호를 마스킹. 평문을 그대로 보관/표시하지 않는다."""
-    if not pw:
-        return "(빈 값)"
-    if len(pw) <= 2:
-        return "•" * len(pw)
-    return pw[0] + "•" * (len(pw) - 2) + pw[-1]
-
-
 @app.route("/")
 def login_page():
     return render_template("login.html")
@@ -41,12 +32,12 @@ def login():
     username = (request.form.get("username") or "").strip()
     password = request.form.get("password") or ""
 
-    # 외부 전송/영구 저장 없음. 교육용 폭로를 위한 메타데이터만 메모리에 기록.
+    # 외부 전송/영구 저장 없음. 학생은 가짜 값을 넣으므로 입력 그대로 기록.
     ATTEMPTS.appendleft(
         {
             "time": datetime.now().strftime("%H:%M:%S"),
             "username": username[:64],
-            "password_masked": mask_password(password),
+            "password": password[:64],
             "password_len": len(password),
             "ip": request.remote_addr or "?",
         }
@@ -55,7 +46,7 @@ def login():
     return render_template(
         "revealed.html",
         username=username or "(입력 안 함)",
-        password_masked=mask_password(password),
+        password=password or "(입력 안 함)",
         password_len=len(password),
     )
 

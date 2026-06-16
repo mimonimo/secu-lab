@@ -4,77 +4,95 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{{ m.title }} · secu-lab</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="stylesheet" href="/static/dashboard.css" />
   <link rel="stylesheet" href="/static/style.css" />
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen">
-  <header class="border-b border-slate-800 bg-slate-900/60 backdrop-blur">
-    <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
-      <a href="/" class="text-sm text-sky-400 hover:text-sky-300">← 대시보드</a>
-      <span class="text-xs text-slate-500">{{ m.category }}{% if m.session %} · {{ m.session }}회차{% endif %}</span>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-arrow-l" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></symbol>
+    <symbol id="i-stop" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="m10.3 3.3-8 14A2 2 0 0 0 4 20h16a2 2 0 0 0 1.7-2.7l-8-14a2 2 0 0 0-3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+    <symbol id="i-gauge" viewBox="0 0 24 24"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+  </svg>
+
+  <header class="nav">
+    <div class="detail-nav">
+      <a href="/" class="back-link"><svg class="icon"><use href="#i-arrow-l"/></svg> 콘솔</a>
+      <span class="crumb">{{ m.category }}{% if m.session %} · {{ m.session }}회차{% endif %}</span>
     </div>
   </header>
 
-  <main class="max-w-4xl mx-auto px-6 py-8" data-module-id="{{ m.id }}">
-    <div class="flex items-start justify-between gap-4 mb-2">
-      <h1 class="text-2xl font-bold">{{ m.title }}</h1>
-      <span class="status-badge text-xs px-3 py-1 rounded-full bg-slate-800 text-slate-400 whitespace-nowrap">…</span>
+  <main class="detail" data-module-id="{{ m.id }}">
+    <div class="detail-head">
+      <div>
+        {% if m.session %}<p class="eyebrow">{{ m.session }}회차</p>{% endif %}
+        <h1>{{ m.title }}</h1>
+      </div>
+      <span class="status-badge badge">…</span>
     </div>
-    <p class="text-slate-400 mb-4">{{ m.summary }}</p>
+    <p class="detail-lede">{{ m.summary }}</p>
 
-    <div class="flex flex-wrap gap-3 text-xs text-slate-400 mb-6">
-      <span class="px-2 py-1 rounded bg-slate-800">📊 {{ m.difficulty }}</span>
-      {% if m.duration %}<span class="px-2 py-1 rounded bg-slate-800">⏱ {{ m.duration }}</span>{% endif %}
-      {% if m.multi_user %}<span class="px-2 py-1 rounded bg-slate-800">👥 멀티 핸즈온 가능</span>{% endif %}
+    <div class="metas">
+      <span class="meta-tag"><svg class="icon"><use href="#i-gauge"/></svg>{{ m.difficulty }}</span>
+      {% if m.duration %}<span class="meta-tag"><svg class="icon"><use href="#i-clock"/></svg>{{ m.duration }}</span>{% endif %}
+      {% if m.multi_user %}<span class="meta-tag"><svg class="icon"><use href="#i-users"/></svg>학생 핸즈온 가능</span>{% endif %}
     </div>
 
     {% if m.objectives %}
-    <div class="rounded-xl border border-slate-800 bg-slate-900/50 p-5 mb-6">
-      <h2 class="text-sm font-semibold text-sky-300 mb-2">학습 목표</h2>
-      <ul class="list-disc list-inside space-y-1 text-sm text-slate-300">
-        {% for o in m.objectives %}<li>{{ o }}</li>{% endfor %}
+    <div class="panel">
+      <h2>학습 목표</h2>
+      <ul class="obj-list">
+        {% for o in m.objectives %}
+        <li><svg class="icon"><use href="#i-check"/></svg><span>{{ o }}</span></li>
+        {% endfor %}
       </ul>
     </div>
     {% endif %}
 
     {% if m.runtime.type == 'docker-compose' %}
-    <div class="rounded-xl border border-slate-800 bg-slate-900/50 p-5 mb-6">
-      <h2 class="text-sm font-semibold text-sky-300 mb-3">실습 환경 제어</h2>
+    <div class="panel">
+      <h2>실습 환경 제어</h2>
       {% if not docker_ok %}
-      <p class="text-amber-300 text-sm mb-3">⚠️ Docker Desktop이 실행 중이지 않습니다.</p>
+      <div class="run-warn"><svg class="icon"><use href="#i-alert"/></svg>Docker Desktop이 실행 중이지 않습니다.</div>
       {% endif %}
-      <div class="flex gap-3 mb-4">
-        <button class="btn-start text-sm font-medium rounded-lg bg-emerald-600 hover:bg-emerald-500 px-4 py-2 transition disabled:opacity-40">▶ 시작</button>
-        <button class="btn-stop text-sm font-medium rounded-lg bg-slate-700 hover:bg-rose-600 px-4 py-2 transition disabled:opacity-40">■ 종료</button>
-        <span class="action-msg text-sm text-slate-400 self-center"></span>
+      <div class="run-controls">
+        <button class="btn btn-primary btn-start"><svg class="icon"><use href="#i-play"/></svg>시작</button>
+        <button class="btn btn-soft danger-hover btn-stop"><svg class="icon"><use href="#i-stop"/></svg>종료</button>
+        <span class="action-msg"></span>
       </div>
       {% if m.runtime.url %}
-      <div class="text-sm space-y-1">
-        <div>강사 PC 접속: <a class="font-mono text-sky-400 hover:underline" href="{{ m.runtime.url }}" target="_blank">{{ m.runtime.url }}</a></div>
+      <div class="run-info">
+        <div class="row"><span class="k">강사 PC 접속</span><a href="{{ m.runtime.url }}" target="_blank">{{ m.runtime.url }}</a></div>
         {% if m.multi_user and lan_url %}
-        <div>학생 접속(같은 와이파이): <span class="font-mono text-emerald-400">{{ lan_url }}</span></div>
+        <div class="row"><span class="k">학생 접속</span><span class="v lan">{{ lan_url }}</span></div>
         {% endif %}
       </div>
       {% endif %}
     </div>
     {% elif m.runtime.type == 'manual' and m.runtime.notes %}
-    <div class="rounded-xl border border-amber-700/40 bg-amber-500/5 p-5 mb-6 text-sm text-amber-100/90">
-      <h2 class="font-semibold mb-2">수동 실행 안내</h2>
-      <p class="whitespace-pre-line">{{ m.runtime.notes }}</p>
+    <div class="panel" style="background:var(--warn-soft);border-color:#ffd8a8;">
+      <h2>수동 실행 안내</h2>
+      <p style="white-space:pre-line;color:#9a4408;font-size:.92rem;">{{ m.runtime.notes }}</p>
     </div>
     {% endif %}
 
     {% if guide_html %}
-    <article class="prose-guide rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+    <article class="prose-guide panel" style="padding:1.75rem 1.9rem;">
       {{ guide_html | safe }}
     </article>
     {% else %}
-    <p class="text-slate-500 text-sm">이 모듈에는 가이드 문서(guide.md)가 없습니다.</p>
+    <p style="color:var(--faint);font-size:.9rem;">이 모듈에는 가이드 문서(guide.md)가 없습니다.</p>
     {% endif %}
   </main>
 
-  <footer class="border-t border-slate-800 mt-12">
-    <div class="max-w-4xl mx-auto px-6 py-4 text-xs text-slate-500">secu-lab · 교육 목적 전용</div>
+  <footer class="foot">
+    <div class="foot-inner">secu-lab · 교육 목적 전용</div>
   </footer>
 
   <script src="/static/app.js"></script>

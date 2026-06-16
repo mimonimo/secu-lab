@@ -26,8 +26,10 @@ secu-lab/
 │   ├─ templates/          # index.html, module.html
 │   └─ static/             # app.js, style.css
 └─ modules/                # ★ 실습 모듈들 (폴더 1개 = 실습 1개)
-    ├─ 01-web-juiceshop/        # 웹 해킹 입문 (OWASP Juice Shop)
-    └─ 02-phishing-awareness/   # 피싱 인식 실습 (자기완결형 Flask)
+    ├─ 01-web-juiceshop/         # 1회차 · 웹 해킹 입문 (OWASP Juice Shop)
+    ├─ 02-phishing-awareness/    # 2회차 · 피싱과 사회공학 (자기완결형 Flask)
+    ├─ 03-session-hijacking/     # 3회차 · 쿠키·세션과 XSS (자기완결형 Flask)
+    └─ 04-site-clone-awareness/  # 4회차 · 사이트 복제와 식별 (실제 복제 동작)
 ```
 
 ## 2. 준비물 (Win11 기준)
@@ -67,10 +69,10 @@ python run.py --lan
 `modules/` 안에 폴더를 하나 만들고 `module.yaml`을 넣으면 끝입니다.
 
 ```yaml
-id: "03-my-lab"
+id: "05-my-lab"
 title: "내 실습"
 category: "웹 보안"
-session: 6
+session: 5
 difficulty: "입문"
 duration: "45분"
 summary: "한 줄 설명"
@@ -87,12 +89,17 @@ runtime:
 - `runtime.type: docker-compose`면 같은 폴더의 `docker-compose.yml`을 대시보드가 제어합니다.
 - Docker가 아닌 실습(예: VMware VM)은 `type: manual`로 두고 `runtime.notes`에 실행 안내를 적으세요.
 
-## 6. 기본 제공 모듈
+## 6. 기본 제공 모듈 (4회차)
 
-| 모듈 | 내용 | 런타임 |
-|---|---|---|
-| `01-web-juiceshop` | OWASP Juice Shop으로 SQL 인젝션·XSS 체험 | Docker (포트 3000) |
-| `02-phishing-awareness` | 가상 브랜드 가짜 로그인 → 즉시 폭로 + 식별법 | Docker (포트 5001) |
+| 회차 | 모듈 | 내용 | 런타임 |
+|---|---|---|---|
+| 1 | `01-web-juiceshop` | OWASP Juice Shop으로 SQL 인젝션·XSS 체험 | Docker (포트 3000) |
+| 2 | `02-phishing-awareness` | 가상 브랜드 가짜 로그인 → 폭로 + 식별법 | Docker (포트 5001) |
+| 3 | `03-session-hijacking` | 저장형 XSS로 세션 쿠키 탈취 → 하이재킹 → 방어 비교 | Docker (포트 5002) |
+| 4 | `04-site-clone-awareness` | 실제 소스를 받아 복제본 재호스팅 → 자격증명 수집 → 식별법 | Docker (포트 5003) |
+
+> 02~04 모듈은 외부 의존 없는 자기완결형 Flask 앱입니다. 모두 라이트 톤의 공통 디자인(`lab.css`)을 사용하며,
+> 실습은 강사 시연이 아니라 **학생이 각자 노트북에서 직접** 진행하도록 설계되어 있습니다.
 
 ## 7. API (참고)
 

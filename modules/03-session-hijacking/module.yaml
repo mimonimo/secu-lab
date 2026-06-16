@@ -1,7 +1,7 @@
 id: "03-session-hijacking"
 title: "세션/쿠키 탈취 실습 · XSS로 로그인 가로채기"
 category: "웹 보안"
-session: 6
+session: 3
 difficulty: "초중급"
 duration: "60분"
 summary: "일부러 취약하게 만든 방명록에서 저장형 XSS로 세션 쿠키가 어떻게 탈취되는지, 탈취된 쿠키로 어떻게 남의 계정에 들어가는지 직접 본다. HttpOnly·출력 인코딩 방어까지."

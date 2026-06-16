@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>두레에듀 학습포털</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Pretendard Variable", Pretendard, -apple-system, "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #7048e8 0%, #4263eb 100%); color: #1a2233;
+      min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
+    .card { background: #fff; border-radius: 18px; width: 100%; max-width: 410px; padding: 2.2rem 2rem; box-shadow: 0 24px 60px rgba(0,0,0,.28); }
+    .logo { display: flex; align-items: center; gap: .55rem; justify-content: center; margin-bottom: .4rem; }
+    .logo .mark { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg,#7048e8,#4263eb); color:#fff; display:grid; place-items:center; font-weight:800; }
+    .logo .name { font-size: 1.4rem; font-weight: 800; letter-spacing: -.03em; }
+    .logo .name b { color: #4263eb; }
+    .tag { text-align: center; color: #868e96; font-size: .88rem; margin-bottom: 1.6rem; }
+    label { display: block; font-size: .8rem; color: #495057; font-weight: 600; margin: .85rem 0 .35rem; }
+    input { width: 100%; padding: .82rem .9rem; border: 1px solid #dee2e6; border-radius: 10px; font-size: .98rem; font-family: inherit; }
+    input:focus { outline: none; border-color: #4263eb; box-shadow: 0 0 0 3px rgba(66,99,235,.15); }
+    button { width: 100%; margin-top: 1.3rem; padding: .85rem; border: none; border-radius: 10px; background: #4263eb; color: #fff; font-size: 1.02rem; font-weight: 700; cursor: pointer; }
+    button:hover { background: #3b5bdb; }
+    .row { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; font-size: .82rem; color: #868e96; }
+    .row a { color: #4263eb; text-decoration: none; }
+    .foot { text-align: center; font-size: .72rem; color: #adb5bd; margin-top: 1.5rem; line-height: 1.6; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo"><span class="mark">D</span><span class="name">두레<b>에듀</b></span></div>
+    <div class="tag">우리 학교 온라인 학습포털</div>
+    <form action="/target-login" method="post">
+      <label for="uid">학번 또는 아이디</label>
+      <input id="uid" name="username" autocomplete="off" placeholder="아이디 입력" required />
+      <label for="pw">비밀번호</label>
+      <input id="pw" name="password" type="password" autocomplete="off" placeholder="비밀번호 입력" required />
+      <button type="submit">로그인</button>
+      <div class="row"><label style="margin:0;font-weight:400;"><input type="checkbox" style="width:auto" /> 로그인 유지</label><a href="#">비밀번호 찾기</a></div>
+    </form>
+    <div class="foot">
+      © 두레에듀 · 본 사이트는 교육용으로 제작된 가상의 브랜드입니다.
+    </div>
+  </div>
+</body>
+</html>

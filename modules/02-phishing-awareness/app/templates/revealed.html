@@ -3,61 +3,64 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>잠깐! 이건 피싱이었어요</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #e2e8f0;
-      min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
-    .card { background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 2rem;
-      width: 100%; max-width: 560px; }
-    .alert { font-size: 1.6rem; font-weight: 800; color: #f87171; margin-bottom: .5rem; }
-    .lead { color: #cbd5e1; margin-bottom: 1.5rem; line-height: 1.6; }
-    .captured { background: #0f172a; border: 1px solid #475569; border-radius: 10px; padding: 1rem 1.2rem; margin-bottom: 1.5rem; }
-    .captured h3 { font-size: .8rem; color: #f87171; text-transform: uppercase; margin-bottom: .6rem; letter-spacing: .05em; }
-    .row { display: flex; justify-content: space-between; padding: .35rem 0; border-bottom: 1px dashed #334155; font-size: .9rem; }
-    .row:last-child { border: none; }
-    .row .k { color: #94a3b8; }
-    .row .v { font-family: ui-monospace, monospace; color: #fde047; }
-    h2 { font-size: 1rem; color: #38bdf8; margin: 1.5rem 0 .6rem; }
-    ul { padding-left: 1.2rem; line-height: 1.8; color: #cbd5e1; }
-    ul b { color: #f1f5f9; }
-    .back { display: inline-block; margin-top: 1.5rem; background: #38bdf8; color: #0f172a; font-weight: 700;
-      padding: .7rem 1.2rem; border-radius: 8px; text-decoration: none; }
-    .note { font-size: .78rem; color: #64748b; margin-top: 1.25rem; line-height: 1.5; }
-  </style>
+  <title>분석 결과 · 방금 입력한 정보</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="stylesheet" href="/static/lab.css" />
 </head>
 <body>
-  <div class="card">
-    <div class="alert">🎣 잠깐! 방금 당신은 피싱에 당했습니다</div>
-    <p class="lead">
-      이 'SkyBird'는 존재하지 않는 가짜 사이트예요. 방금 입력한 정보는 진짜 로그인에 쓰인 게 아니라,
-      <b>가짜 페이지를 만든 사람(공격자)에게 그대로 넘어갑니다.</b> 실습이라 안전하지만, 진짜였다면 계정을 빼앗겼을 거예요.
-    </p>
-
-    <div class="captured">
-      <h3>공격자가 받아간 정보</h3>
-      <div class="row"><span class="k">아이디 / 이메일</span><span class="v">{{ username }}</span></div>
-      <div class="row"><span class="k">비밀번호</span><span class="v">{{ password_masked }} ({{ password_len }}자)</span></div>
+  <nav class="lab-nav">
+    <div class="lab-nav-inner">
+      <span class="lab-brand"><span class="mark">S</span>secu-lab</span>
+      <span class="spacer"></span>
+      <span class="badge badge-danger"><span class="dot"></span>방금 그 페이지는 피싱이었습니다</span>
     </div>
-    <p style="font-size:.8rem;color:#94a3b8;margin-bottom:1rem;">
-      ※ 실습에서는 비밀번호를 가렸지만, 실제 공격자는 <b>전체 비밀번호를 그대로</b> 봅니다.
-    </p>
+  </nav>
 
-    <h2>이렇게 알아챘어야 해요 🔍</h2>
-    <ul>
-      <li><b>주소창(도메인)</b>을 확인하세요. 진짜 사이트 주소가 맞나요? 비슷하지만 다른 철자는 아닌가요?</li>
-      <li><b>http</b>인지 <b>https</b>(자물쇠)인지 보세요. 로그인 페이지가 http면 위험 신호.</li>
-      <li><b>"지금 로그인하면 선물"</b> 같은 급한 미끼는 전형적인 피싱 수법이에요.</li>
-      <li>메시지·메일의 링크로 들어온 로그인 창은 <b>특히 의심</b>하세요. 직접 주소를 입력해 들어가세요.</li>
-      <li>같은 비밀번호를 여러 곳에 쓰면, 한 곳이 털릴 때 전부 위험해져요.</li>
-    </ul>
+  <main class="lab-main">
+    <div class="page-head">
+      <div class="eyebrow">Phishing Debrief</div>
+      <h1>방금 입력한 정보, 공격자에게 그대로 넘어갔습니다</h1>
+      <p>방금 본 'SkyBird'는 실제로 존재하지 않는 가짜 사이트입니다. 입력한 값은 로그인에 쓰인 게 아니라, 이 페이지를 만든 사람에게 전송됩니다. 지금은 실습이라 안전하지만, 진짜였다면 계정이 넘어갔을 겁니다.</p>
+    </div>
 
-    <a class="back" href="/">← 다시 해보기</a>
+    <div class="card">
+      <div class="card-head">
+        <span class="step">1</span>
+        <h2>공격자가 받아간 값</h2>
+      </div>
+      <table>
+        <tbody>
+          <tr><td class="muted" style="width:40%">아이디 / 이메일</td><td class="mono">{{ username }}</td></tr>
+          <tr><td class="muted">비밀번호</td><td class="mono">{{ password }} <span class="faint">({{ password_len }}자)</span></td></tr>
+        </tbody>
+      </table>
+      <div class="callout callout-warn" style="margin-top:1rem;">
+        지금 입력한 값이 <strong>한 글자도 빠짐없이 그대로</strong> 공격자에게 넘어갑니다. 실제 상황에서 진짜 비밀번호를 넣었다면, 같은 비밀번호를 쓰는 다른 서비스 계정까지 함께 위험해집니다.
+      </div>
+    </div>
 
-    <p class="note">
-      교육용 시뮬레이션입니다. 입력값은 외부로 전송되지 않으며 어디에도 영구 저장되지 않습니다.
-      실습 환경을 종료하면 모든 기록이 사라집니다.
-    </p>
-  </div>
+    <div class="card">
+      <div class="card-head">
+        <span class="step">2</span>
+        <h2>어디서 알아챘어야 할까</h2>
+      </div>
+      <p class="muted" style="margin-bottom:1rem;">진짜와 가짜를 가르는 건 디자인이 아니라 아래 신호들입니다.</p>
+      <table>
+        <thead><tr><th>점검 항목</th><th>이렇게 확인한다</th></tr></thead>
+        <tbody>
+          <tr><td><strong>주소창의 도메인</strong></td><td>철자가 정확한가? <code>skybird.com</code> 인 척하는 <code>skybird-login.net</code> 은 아닌가?</td></tr>
+          <tr><td><strong>자물쇠(HTTPS)</strong></td><td>로그인 페이지가 <code>http</code> 거나 자물쇠가 없으면 멈춘다.</td></tr>
+          <tr><td><strong>유입 경로</strong></td><td>문자·메일·DM 링크로 들어온 로그인 창은 의심한다. 앱이나 즐겨찾기로 직접 들어간다.</td></tr>
+          <tr><td><strong>급한 미끼</strong></td><td>"지금 로그인하면 선물", "계정이 정지됩니다" 같은 압박은 전형적인 수법.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="row" style="margin-top:1.5rem;">
+      <a class="btn btn-primary" href="/">다시 시도해보기</a>
+      <span class="faint">입력값은 외부로 전송되지 않으며 영구 저장되지 않습니다. 환경 종료 시 모두 삭제됩니다.</span>
+    </div>
+  </main>
 </body>
 </html>
